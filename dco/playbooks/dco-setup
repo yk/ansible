@@ -33,9 +33,11 @@
             shell: curl https://bootstrap.pypa.io/get-pip.py creates=get-pip.py
 
         -   name: install pip
+            sudo: yes
             shell: python get-pip.py creates=/usr/bin/pip
 
         -   name: install pip3
+            sudo: yes
             shell: python3 get-pip.py creates=/usr/bin/pip3
 
         -   name: install python packages
