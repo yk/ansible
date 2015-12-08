@@ -1,0 +1,5 @@
+-   name: clone bazel
+    git: repo=https://github.com/bazelbuild/bazel.git dest=~/git/bazel
+
+-   name: compile bazel
+    shell: cd ~/git/bazel && ./compile.sh && cd ~/bin && ln -s ~/git/bazel/output/bazel creates=~/bin/bazel

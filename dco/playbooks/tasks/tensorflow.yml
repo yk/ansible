@@ -1,0 +1,5 @@
+-   name: clone tensorflow
+    git: repo=https://github.com/tensorflow/tensorflow.git dest=~/git/tensorflow
+
+-   name: compile tensorflow
+    shell: cd ~/git/tensorflow && yes '' | ./configure && bazel build -c opt tensorflow/models/rnn/ptb:ptb_word_lm

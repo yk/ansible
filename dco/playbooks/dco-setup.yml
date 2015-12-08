@@ -1,0 +1,32 @@
+-   hosts: dco
+
+    remote_user: root
+
+    vars:
+        -   username: ykilcher
+
+    tasks:
+        -   name: create remote non-root user
+            user: name={{ username }}
+
+        -   name: add public key
+            authorized_key: user={{ username }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+        -   name: add user to sudoers
+            lineinfile: "dest=/etc/sudoers state=present regexp='^{{ username }}' line='{{ username }} ALL=(ALL) NOPASSWD: ALL'"
+
+
+-   hosts: dco
+
+    environment:
+        PATH: "{{ ansible_env.PATH }}:~/bin"
+
+    tasks:
+        -   name: create bin dir
+            file: path=~/bin state=directory mode=0755
+
+        -   include: tasks/yum-defaults.yml
+        -   include: tasks/python-defaults.yml
+        -   include: tasks/python3-defaults.yml
+        -   include: tasks/bazel.yml
+        -   include: tasks/tensorflow.yml
