@@ -29,9 +29,14 @@
             sudo: yes
             yum: name=freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,openssl-devel,curl,vim,python,python3,swig,zip,unzip,gcc,python-devel,python3-devel,gcc-c++,gcc-gfortran,git,java-1.8.0-openjdk-devel,zlib-devel,screen state=present
 
+        -   name: get pip install script
+            shell: curl https://bootstrap.pypa.io/get-pip.py creates=get-pip.py
+
         -   name: install pip
-            sudo: yes
-            shell: curl https://bootstrap.pypa.io/get-pip.py > get-pip.py && python get-pip.py && python3 get-pip.py creates=/usr/bin/pip3
+            shell: python get-pip.py creates=/usr/bin/pip
+
+        -   name: install pip3
+            shell: python3 get-pip.py creates=/usr/bin/pip3
 
         -   name: install python packages
             sudo: yes
