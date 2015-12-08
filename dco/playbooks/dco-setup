@@ -27,15 +27,26 @@
 
         -   name: install stuff
             sudo: yes
-            yum: name=freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,openssl-devel,curl,vim,python,swig,zip,unzip,gcc,python-devel,gcc-c++,gcc-gfortran,git,java-1.8.0-openjdk-devel,zlib-devel,screen state=present
+            yum: name=freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,openssl-devel,curl,vim,python,python3,swig,zip,unzip,gcc,python-devel,python3-devel,gcc-c++,gcc-gfortran,git,java-1.8.0-openjdk-devel,zlib-devel,screen state=present
 
         -   name: install pip
             sudo: yes
-            shell: curl https://bootstrap.pypa.io/get-pip.py | python - creates=/usr/bin/pip
+            shell: curl https://bootstrap.pypa.io/get-pip.py > get-pip.py && python get-pip.py && python3 get-pip.py creates=/usr/bin/pip3
 
         -   name: install python packages
             sudo: yes
-            pip: name={{ item }}
+            pip: name={{ item }} executable=/usr/bin/pip
+            with_items:
+                -   requests[security]
+                -   numpy
+                -   scipy
+                -   sklearn
+                -   matplotlib
+
+
+        -   name: install python3 packages
+            sudo: yes
+            pip: name={{ item }} executable=/usr/bin/pip3
             with_items:
                 -   requests[security]
                 -   numpy
