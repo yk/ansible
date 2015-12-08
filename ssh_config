@@ -1,0 +1,9 @@
+Host dcoh
+    HostName dco-head001.dco.ethz.ch
+    ForwardAgent yes
+    User ykilcher
+
+Host dco-node*
+    ProxyCommand ssh -i '~/.ssh/id_rsa' dcoh nc %h %p
+    User ykilcher
+    
