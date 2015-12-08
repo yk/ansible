@@ -4,6 +4,6 @@ Host dcoh
     User ykilcher
 
 Host dco-node*
-    ProxyCommand ssh -q -i '~/.ssh/id_rsa' dcoh nc %h %p
+    ProxyCommand ssh -q dcoh "ssh-add && nc %h %p"
     User ykilcher
     

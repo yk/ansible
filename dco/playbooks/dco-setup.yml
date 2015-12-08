@@ -25,8 +25,8 @@
         -   name: create bin dir
             file: path=~/bin state=directory mode=0755
 
-        -   include: ../../tasks/yum-defaults.yml
-        -   include: ../../tasks/python-defaults.yml
-        -   include: ../../tasks/python3-defaults.yml
-        -   include: ../../tasks/bazel.yml
-        -   include: ../../tasks/tensorflow.yml
+        -   include: ../../common/tasks/yum-defaults.yml
+        -   include: ../../common/tasks/python-defaults.yml
+        -   include: ../../common/tasks/python3-defaults.yml
+        -   include: ../../common/tasks/bazel.yml
+        -   include: ../../common/tasks/tensorflow.yml

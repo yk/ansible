@@ -1,5 +1,5 @@
 -   name: get pip install script
-    shell: curl https://bootstrap.pypa.io/get-pip.py creates=get-pip.py
+    shell: curl https://bootstrap.pypa.io/get-pip.py > get-pip.py creates=get-pip.py
 
 -   name: install pip
     sudo: yes
