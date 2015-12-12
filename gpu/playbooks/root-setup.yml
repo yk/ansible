@@ -1,0 +1,65 @@
+-   hosts: gpu
+    
+    vars:
+        cuda_env:
+            CUDA_ROOT: /usr/local/cuda
+            CFLAGS: -I/usr/local/cuda/include 
+            LDFLAGS: -L/usr/local/cuda/lib64 
+            PATH: "{{ ansible_env.PATH }}:/usr/local/cuda/bin"
+            LD_LIBRARY_PATH: "{{ ansible_env.LD_LIBRARY_PATH }}:/usr/local/cuda/lib64"
+
+    tasks:
+        -   name: install dnf packages
+            sudo: yes
+            dnf: name=freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,openssl-devel,curl,vim,python,python3,swig,zip,unzip,gcc,python-devel,python3-devel,gcc-c++,gcc-gfortran,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid state=present
+
+        -   name: add rpmfusion free
+            sudo: yes
+            dnf: name=http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch.rpm state=present
+
+        -   include: ../../common/tasks/python-defaults.yml
+        -   include: ../../common/tasks/python3-defaults.yml
+
+        -   name: blacklist nouveau
+            sudo: yes
+            kernel_blacklist: name=nouveau state=present
+            register: blnouveau
+
+        -   include: ../../common/tasks/reboot.yml
+            when: blnouveau.changed
+
+        -   name: download nvidia driver installer
+            get_url: url=http://us.download.nvidia.com/XFree86/Linux-x86_64/352.63/NVIDIA-Linux-x86_64-352.63.run dest={{ ansible_env.HOME }}/nvidia.run mode=0544
+
+        -   name: install nvidia driver
+            sudo: yes
+            command: "{{ ansible_env.HOME }}/nvidia.run -s"
+            args:
+                creates: /usr/bin/nvidia-installer
+            register: nvidiadriver
+
+        -   include: ../../common/tasks/reboot.yml
+            when: nvidiadriver.changed
+
+        -   name: install cuda repositories
+            sudo: yes
+            dnf: name=http://developer.download.nvidia.com/compute/cuda/repos/fedora21/x86_64/cuda-repo-fedora21-7.5-18.x86_64.rpm state=present
+
+        -   name: install cuda 
+            sudo: yes
+            dnf: name=cuda state=present
+
+        -   name: make cuda accept gcc5
+            sudo: yes
+            lineinfile: line='//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported!' regexp="unsupported GNU version" dest=/usr/local/cuda/include/host_config.h
+
+        -   name: install pycuda
+            sudo: yes
+            pip: name=pycuda executable=/usr/bin/pip2
+            environment: cuda_env
+
+        -   name: install pycuda3
+            sudo: yes
+            pip: name=pycuda executable=/usr/bin/pip3
+            environment: cuda_env
+

@@ -3,14 +3,15 @@
 
 -   name: install pip
     sudo: yes
-    shell: python get-pip.py creates=/usr/bin/pip
+    shell: python get-pip.py creates=/usr/bin/pip2
 
 -   name: install python packages
     sudo: yes
-    pip: name={{ item }} executable=/usr/bin/pip
+    pip: name={{ item }} executable=/usr/bin/pip2
     with_items:
         -   requests[security]
         -   numpy
         -   scipy
         -   sklearn
         -   matplotlib
+        -   theano
