@@ -1,6 +1,9 @@
 -   hosts: gpu
 
     tasks:
+        -   name: make home bin dir
+            file: path={{ ansible_env.HOME }}/bin state=directory mode=0755
+
         -   name: modify path to contain cuda stuff
             lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='export PATH="/usr/local/cuda/bin:$PATH"'
 
@@ -12,3 +15,6 @@
 
         -   name: add cuda include dir to bashrc
             lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='export CUDA_HOME="/usr/local/cuda"'
+
+        -   name: modify path to contain HOME/bin
+            lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='export PATH="{{ ansible_env.HOME }}/bin:$PATH"'
