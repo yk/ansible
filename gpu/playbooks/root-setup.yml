@@ -10,9 +10,13 @@
             LD_LIBRARY_PATH: "{{ ansible_env.LD_LIBRARY_PATH }}:/usr/local/cuda/lib64"
 
     tasks:
+        -   name: install gcc
+            sudo: yes
+            shell: dnf install gcc-4.9.2 gcc-c++-4.9.2 gcc-gfortran-4.9.2 --releasever=21 --allowerasing -y creates=/usr/lib/gcc/x86_64-redhat-linux/4.9.2/libstdc++.so
+
         -   name: install dnf packages
             sudo: yes
-            dnf: name=freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,openssl-devel,curl,vim,python,python3,swig,zip,unzip,gcc,python-devel,python3-devel,gcc-c++,gcc-gfortran,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid state=present
+            dnf: name=freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,openssl-devel,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid state=present
 
         -   name: add rpmfusion free
             sudo: yes
