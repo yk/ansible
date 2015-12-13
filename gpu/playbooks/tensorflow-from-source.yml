@@ -1,0 +1,8 @@
+-   hosts: gpu
+
+    tasks:
+        -   name: clone repository
+            git: repo=https://github.com/tensorflow/tensorflow dest={{ ansible_env.HOME }}/tensorflow
+
+        -   name: configure tensorflow
+            shell: cd {{ ansible_env.HOME }}/tensorflow && PYTHON_BIN_PATH=/usr/bin/python3 TF_NEED_CUDA=1 CUDA_TOOLKIT_PATH=/usr/local/cuda CUDNN_INSTALL_PATH=/usr/local/cuda ./configure creates={{ ansible_env.HOME }}/tensorflow/python_bin_path.sh
