@@ -3,6 +3,7 @@
     vars:
         cuda_env:
             CUDA_ROOT: /usr/local/cuda
+            CUDA_HOME: /usr/local/cuda
             CFLAGS: -I/usr/local/cuda/include 
             LDFLAGS: -L/usr/local/cuda/lib64 
             PATH: "{{ ansible_env.PATH }}:/usr/local/cuda/bin"
@@ -47,7 +48,7 @@
 
         -   name: install cuda 
             sudo: yes
-            dnf: name=cuda state=present
+            dnf: name=cuda-7-0 state=present
 
         -   name: make cuda accept gcc5
             sudo: yes
@@ -63,3 +64,27 @@
             pip: name=pycuda executable=/usr/bin/pip3
             environment: cuda_env
 
+        -   name: extract cudnn
+            unarchive: src=../files/cudnn.tgz dest={{ ansible_env.HOME }}
+
+        -   name: copy cudnn files
+            sudo: yes
+            shell: cp {{ ansible_env.HOME }}/cudnn-6.5*/libcudnn* /usr/local/cuda/lib64/ && cp {{ ansible_env.HOME }}/cudnn-6.5*/cudnn.h /usr/local/cuda/include/ creates=/usr/local/cuda/include/cudnn.h
+            
+
+        -   name: download bazel
+            get_url: url=https://github.com/bazelbuild/bazel/releases/download/0.1.2/bazel-0.1.2-installer-linux-x86_64.sh dest={{ ansible_env.HOME }}/bazel.sh mode=0544
+        
+        -   name: install bazel
+            sudo: yes
+            command: "{{ ansible_env.HOME }}/bazel.sh creates=/usr/local/bin/bazel"
+
+        -   name: install tensorflow python2
+            sudo: yes
+            pip: name=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.6.0-cp27-none-linux_x86_64.whl executable=/usr/bin/pip2
+            environment: cuda_env
+
+        -   name: install tensorflow python3
+            sudo: yes
+            pip: name=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.6.0-cp34-none-linux_x86_64.whl executable=/usr/bin/pip3
+            environment: cuda_env

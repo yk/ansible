@@ -9,3 +9,6 @@
 
         -   name: add cuda include dir to bashrc
             lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='export CUDA_ROOT="/usr/local/cuda"'
+
+        -   name: add cuda include dir to bashrc
+            lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='export CUDA_HOME="/usr/local/cuda"'
