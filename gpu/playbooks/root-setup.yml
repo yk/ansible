@@ -10,6 +10,10 @@
             LD_LIBRARY_PATH: "{{ ansible_env.LD_LIBRARY_PATH }}:/usr/local/cuda/lib64"
 
     tasks:
+        -   name: make files directory
+            sudo: yes
+            file: path=/local/files state=directory mode=0755
+
         -   name: install gcc
             sudo: yes
             shell: dnf install gcc-4.9.2 gcc-c++-4.9.2 gcc-gfortran-4.9.2 --releasever=21 --allowerasing -y creates=/usr/lib/gcc/x86_64-redhat-linux/4.9.2/libstdc++.so
@@ -68,8 +72,14 @@
             pip: name=pycuda executable=/usr/bin/pip3
             environment: cuda_env
 
+        -   name: copy cudnn2
+            copy: src=../files/cudnn2.tgz dest=/local/files/cudnn2.tgz mode=0755
+
+        -   name: copy cudnn3
+            copy: src=../files/cudnn3.tgz dest=/local/files/cudnn3.tgz mode=0755
+
         -   name: extract cudnn
-            unarchive: src=../files/cudnn.tgz dest={{ ansible_env.HOME }} creates={{ ansible_env.HOME }}/cudnn-6.5-linux-x64-v2/cudnn.h
+            unarchive: src=/local/files/cudnn2.tgz dest={{ ansible_env.HOME }} creates={{ ansible_env.HOME }}/cudnn-6.5-linux-x64-v2/cudnn.h copy=no
 
         -   name: copy cudnn files
             sudo: yes

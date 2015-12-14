@@ -1,0 +1,43 @@
+-   hosts: gpu
+
+    vars:
+        basedir: "{{ ansible_env.HOME }}/caffe"
+
+    tasks:
+        -   name: copy cudnn
+            unarchive: src=/local/files/cudnn3.tgz dest={{ ansible_env.HOME }} creates={{ ansible_env.HOME }}/cuda/include/cudnn.h copy=no
+
+        -   name: clone repository
+            git: repo=https://github.com/BVLC/caffe.git dest={{ basedir }}
+
+        -   name: copy config file
+            shell: cd {{ basedir }} && cp Makefile.config.example Makefile.config creates={{ basedir }}/Makefile.config
+
+        -   name: enable cudnn
+            lineinfile: "line='{{ item }}' dest={{ basedir }}/Makefile.config regexp='^(# )?{{ item }}'"
+            with_items:
+                -   "USE_CUDNN := 1"
+
+        -   name: set python lib location
+            lineinfile: "line='PYTHON_LIB := /usr/lib64' dest={{ basedir }}/Makefile.config regexp='^PYTHON_LIB :='"
+
+        -   name: set numpy include location
+            lineinfile: "line='\t\t /usr/lib64/python2.7/site-packages/numpy/core/include' dest={{ basedir }}/Makefile.config regexp='/usr/lib(64)?/python2\\.7/(dist|site)-packages/numpy/core/include'"
+
+        -   name: set cuda include
+            lineinfile: "line='INCLUDE_DIRS := {{ ansible_env.HOME }}/cuda/include $(INCLUDE_DIRS) /usr/local/cuda/include' dest={{ basedir }}/Makefile.config"
+
+        -   name: set cuda library path
+            lineinfile: "line='LIBRARY_DIRS := {{ ansible_env.HOME }}/cuda/lib64 $(LIBRARY_DIRS) /usr/local/cuda/lib64' dest={{ basedir }}/Makefile.config"
+
+        -   name: set blas to openblas
+            lineinfile: "line='BLAS := open' dest={{ basedir }}/Makefile.config regexp='^BLAS :='"
+        
+        #-   name: set blas include location
+        #lineinfile: "line='BLAS_INCLUDE := /usr/include/atlas' dest={{ basedir }}/Makefile.config regexp='^(# )?BLAS_INCLUDE :='"
+        
+        #-   name: set blas lib location
+        #lineinfile: "line='BLAS_LIB := /usr/lib64/atlas' dest={{ basedir }}/Makefile.config regexp='^(# )?BLAS_LIB :='"
+
+        -   shell: cd {{ basedir }} && make all
+            
