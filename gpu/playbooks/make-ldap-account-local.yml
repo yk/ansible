@@ -1,0 +1,42 @@
+-   hosts: gpu
+    
+    vars_prompt:
+        -   name: "username"
+            prompt: "nethz-username"
+
+    tasks:
+        -   shell: getent passwd | grep "^{{ username }}:"
+            sudo: yes
+
+        -   shell: getent passwd | grep "^{{ username }}:" | cut -d ":" -f 3 
+            register: lu_uid
+            sudo: yes
+
+        -   shell: getent passwd | grep "^{{ username }}:" | cut -d ":" -f 4
+            register: lu_gid
+            sudo: yes
+
+        -   shell: getent passwd | grep "^{{ username }}:" | cut -d ":" -f 5
+            register: lu_name
+            sudo: yes
+
+        -   lineinfile: "dest=/etc/passwd line='{{ username }}:*:{{ lu_uid.stdout_lines[0] }}:{{ lu_gid.stdout_lines[0] }}:{{ lu_name.stdout_lines[0] }}:/local/home/{{ username }}:/bin/bash'"
+            sudo: yes
+
+        -   lineinfile: "dest=/etc/shadow line='{{ username }}:*:16780:0:99999:7:::'"
+            sudo: yes
+
+        -   lineinfile: "dest=/etc/group line='hofmann:x:{{ lu_gid.stdout_lines[0] }}:'"
+            sudo: yes
+
+        -   file: path=/local/home/{{ username }} state=directory mode=0755 owner={{ username }} group=hofmann 
+            register: homedir_result
+            sudo: yes
+
+        -   shell: cp /etc/skel/{{ item }} /local/home/{{ username }}/{{ item }} && chown {{ username }}:hofmann /local/home/{{ username }}/{{ item }}
+            sudo: yes
+            when: homedir_result.changed
+            with_items:
+                -   .bash_logout
+                -   .bash_profile
+                -   .bashrc
