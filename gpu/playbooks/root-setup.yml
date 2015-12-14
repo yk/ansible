@@ -16,7 +16,7 @@
 
         -   name: install dnf packages
             sudo: yes
-            dnf: name=freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,openssl-devel,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid state=present
+            dnf: name=nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,openssl-devel,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs state=present
 
         -   name: add rpmfusion free
             sudo: yes
@@ -69,7 +69,7 @@
             environment: cuda_env
 
         -   name: extract cudnn
-            unarchive: src=../files/cudnn.tgz dest={{ ansible_env.HOME }}
+            unarchive: src=../files/cudnn.tgz dest={{ ansible_env.HOME }} creates={{ ansible_env.HOME }}/cudnn-6.5-linux-x64-v2/cudnn.h
 
         -   name: copy cudnn files
             sudo: yes

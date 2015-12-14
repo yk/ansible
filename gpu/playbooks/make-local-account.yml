@@ -9,5 +9,16 @@
             prompt: "password"
 
     tasks:
-        -   user: name={{ username }} group={{ group }} home=/local/home/{{ username }} skeleton=/etc/skel
+        -   group: name={{ group }} state=present
+            sudo: yes
+
+        -   user: name={{ username }} group={{ group }} home=/local/home/{{ username }} createhome=no shell=/bin/bash
+            sudo: yes
+            register: createuser
+
+        -   shell: cp -r /etc/skel /local/home/{{ username }} && chown -R {{ username }}:{{ group }} /local/home/{{ username }}
+            sudo: yes
+            when: createuser.changed
+
+        -   shell: echo {{ password }} | passwd --stdin {{ username }}
             sudo: yes
