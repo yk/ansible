@@ -20,7 +20,7 @@
 
         -   name: install dnf packages
             sudo: yes
-            dnf: name=nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel state=present
+            dnf: name=nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel,zsh state=present
 
         -   name: add rpmfusion free
             sudo: yes
