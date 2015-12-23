@@ -20,7 +20,7 @@
 
         -   name: install dnf packages
             sudo: yes
-            dnf: name=nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel,zsh state=present
+            dnf: name=nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel,zsh,cmake state=present
 
         -   name: add rpmfusion free
             sudo: yes
@@ -65,12 +65,12 @@
         -   name: install pycuda
             sudo: yes
             pip: name=pycuda executable=/usr/bin/pip2
-            environment: cuda_env
+            environment: "{{cuda_env}}"
 
         -   name: install pycuda3
             sudo: yes
             pip: name=pycuda executable=/usr/bin/pip3
-            environment: cuda_env
+            environment: "{{cuda_env}}"
 
         -   name: copy cudnn2
             sudo: yes
@@ -98,12 +98,12 @@
         -   name: install tensorflow python2
             sudo: yes
             pip: name=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.6.0-cp27-none-linux_x86_64.whl executable=/usr/bin/pip2
-            environment: cuda_env
+            environment: "{{cuda_env}}"
 
         -   name: install tensorflow python3
             sudo: yes
             pip: name=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.6.0-cp34-none-linux_x86_64.whl executable=/usr/bin/pip3
-            environment: cuda_env
+            environment: "{{cuda_env}}"
         
         -   name: make skel bin dir
             sudo: yes
