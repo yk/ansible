@@ -2,11 +2,11 @@
     shell: curl https://bootstrap.pypa.io/get-pip.py > get-pip.py creates=get-pip.py
 
 -   name: install pip
-    sudo: yes
+    become: yes
     shell: python get-pip.py creates=/usr/bin/pip2
 
 -   name: install python packages
-    sudo: yes
+    become: yes
     pip: name={{ item }} executable=/usr/bin/pip2
     with_items:
         -   requests[security]
