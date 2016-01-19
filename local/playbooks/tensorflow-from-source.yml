@@ -1,0 +1,15 @@
+-   hosts: 127.0.0.1
+    connection: local
+
+    tasks:
+        -   name: clone repository
+            git: repo=https://github.com/tensorflow/tensorflow dest={{ ansible_env.HOME }}/git/tensorflow update=no version=60114c44b01de65ed3403c06671aae65e6e6e169
+
+        -   name: configure tensorflow
+            shell: cd {{ ansible_env.HOME }}/git/tensorflow && PYTHON_BIN_PATH=/usr/local/bin/python3 TF_NEED_CUDA=0 ./configure creates={{ ansible_env.HOME }}/git/tensorflow/tools/python_bin_path.sh
+
+        -   name: build pip package
+            shell: cd {{ ansible_env.HOME }}/git/tensorflow && bazel build -c opt //tensorflow/tools/pip_package:build_pip_package && bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg creates=/tmp/tensorflow_pkg/tensorflow-0.6.0-py3-none-any.whl
+
+        -   name: install pip package
+            pip: executable=pip3 name='file:///tmp/tensorflow_pkg/tensorflow-0.6.0-py3-none-any.whl'

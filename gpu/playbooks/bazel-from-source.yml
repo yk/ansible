@@ -1,0 +1,12 @@
+-   hosts: gpu
+
+    tasks:
+        -   name: clone repository
+            git: repo=https://github.com/bazelbuild/bazel dest={{ ansible_env.HOME }}/bazel
+
+        -   name: build bazel
+            shell: cd {{ ansible_env.HOME }}/bazel && ./compile.sh creates={{ ansible_env.HOME }}/bazel/output/bazel
+
+        -   name: symlink binary into home bin
+            file: src={{ ansible_env.HOME }}/bazel/output/bazel dest={{ ansible_env.HOME }}/bin/bazel state=link
+
