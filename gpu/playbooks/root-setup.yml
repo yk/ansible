@@ -54,13 +54,25 @@
             sudo: yes
             dnf: name=http://developer.download.nvidia.com/compute/cuda/repos/fedora21/x86_64/cuda-repo-fedora21-7.5-18.x86_64.rpm state=present
 
-        -   name: install cuda 
+        -   name: install cuda75
+            sudo: yes
+            dnf: name=cuda-7-5 state=present
+
+        -   name: install cuda7 
             sudo: yes
             dnf: name=cuda-7-0 state=present
 
-        -   name: make cuda accept gcc5
+        -   name: symlink cuda to cuda7
             sudo: yes
-            lineinfile: line='//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported!' regexp="unsupported GNU version" dest=/usr/local/cuda/include/host_config.h
+            file: src=/usr/local/cuda-7.0 dest=/usr/local/cuda state=link
+
+        -   name: make cuda7 accept gcc5
+            sudo: yes
+            lineinfile: line='//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported!' regexp="unsupported GNU version" dest=/usr/local/cuda-7.0/include/host_config.h
+
+        -   name: make cuda75 accept gcc5
+            sudo: yes
+            lineinfile: line='//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported!' regexp="unsupported GNU version" dest=/usr/local/cuda-7.5/include/host_config.h
 
         -   name: install pycuda
             sudo: yes
@@ -80,13 +92,22 @@
             sudo: yes
             copy: src=../files/cudnn3.tgz dest=/local/files/cudnn3.tgz mode=0755
 
-        -   name: extract cudnn
+        -   name: extract cudnn2
             unarchive: src=/local/files/cudnn2.tgz dest={{ ansible_env.HOME }} creates={{ ansible_env.HOME }}/cudnn-6.5-linux-x64-v2/cudnn.h copy=no
 
-        -   name: copy cudnn files
+        -   name: copy cudnn2 files
             sudo: yes
-            shell: cp {{ ansible_env.HOME }}/cudnn-6.5*/libcudnn* /usr/local/cuda/lib64/ && cp {{ ansible_env.HOME }}/cudnn-6.5*/cudnn.h /usr/local/cuda/include/ creates=/usr/local/cuda/include/cudnn.h
-            
+            shell: cp {{ ansible_env.HOME }}/cudnn-6.5*/libcudnn* /usr/local/cuda-7.0/lib64/ && cp {{ ansible_env.HOME }}/cudnn-6.5*/cudnn.h /usr/local/cuda-7.0/include/ creates=/usr/local/cuda-7.0/include/cudnn.h
+
+        -   name: make cudnn3 dir
+            file: path={{ ansible_env.HOME }}/cudnn3 state=directory
+
+        -   name: extract cudnn3
+            unarchive: src=/local/files/cudnn3.tgz dest={{ ansible_env.HOME }}/cudnn3 creates={{ ansible_env.HOME }}/cudnn3/cuda/include/cudnn.h copy=no
+
+        -   name: copy cudnn3 files
+            sudo: yes
+            shell: cp {{ ansible_env.HOME }}/cudnn3/cuda/include/* /usr/local/cuda-7.5/include/ && cp {{ ansible_env.HOME }}/cudnn3/cuda/lib64/* /usr/local/cuda-7.5/lib64/ creates=/usr/local/cuda-7.5/include/cudnn.h
 
         -   name: download bazel
             get_url: url=https://github.com/bazelbuild/bazel/releases/download/0.1.3/bazel-0.1.3-installer-linux-x86_64.sh dest={{ ansible_env.HOME }}/bazel.sh mode=0544
@@ -128,3 +149,11 @@
         -   name: modify path to contain HOME/bin
             sudo: yes
             lineinfile: dest=/etc/skel/.bashrc line='export PATH="$HOME/bin:$PATH"'
+
+        -   name: make hofmann-scratch folder in media
+            sudo: yes
+            file: path=/media/hofmann-scratch state=directory
+
+        -   name: modify fstab to contain scratch
+            sudo: yes
+            lineinfile: dest=/etc/fstab line='scratch-hofmann.inf.ethz.ch:/export/scratch/hofmann/dataset /media/hofmann-scratch nfs defaults 0 0'
