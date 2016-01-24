@@ -20,7 +20,7 @@
 
         -   name: install dnf packages
             sudo: yes
-            dnf: name=nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,python-tools,python3-tools,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel,zsh,cmake,htop,python-ipython,python3-ipython,tmux,pcre,graphviz,ctags,thefuck,autojump,autojump-zsh,libevent,libevent-devel state=present
+            dnf: name=nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,python-tools,python3-tools,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel,zsh,cmake,htop,python-ipython,python3-ipython,pcre,graphviz,ctags,thefuck,autojump,autojump-zsh,libevent,libevent-devel state=present
 
         -   name: add rpmfusion free
             sudo: yes
@@ -157,3 +157,16 @@
         -   name: modify fstab to contain scratch
             sudo: yes
             lineinfile: dest=/etc/fstab line='scratch-hofmann.inf.ethz.ch:/export/scratch/hofmann/dataset /media/hofmann-scratch nfs defaults 0 0'
+
+        -   name: get tmux 2.1
+            get_url: url=https://github.com/tmux/tmux/releases/download/2.1/tmux-2.1.tar.gz dest={{ ansible_env.HOME}}/tmux-2.1.tar.gz
+
+        -   name: unpack tmux 2.1
+            unarchive: src={{ ansible_env.HOME }}/tmux-2.1.tar.gz dest={{ ansible_env.HOME }} creates={{ ansible_env.HOME }}/tmux-2.1/configure copy=no
+
+        -   name: build tmux 2.1
+            shell: cd tmux-2.1 && ./configure && make creates={{ ansible_env.HOME }}/tmux-2.1/tmux
+
+        -   name: install tmux 2.1
+            sudo: yes
+            shell: cd tmux-2.1 && make install creates=/usr/local/bin/tmux
