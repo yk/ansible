@@ -110,7 +110,7 @@
             shell: cp {{ ansible_env.HOME }}/cudnn3/cuda/include/* /usr/local/cuda-7.5/include/ && cp {{ ansible_env.HOME }}/cudnn3/cuda/lib64/* /usr/local/cuda-7.5/lib64/ creates=/usr/local/cuda-7.5/include/cudnn.h
 
         -   name: download bazel
-            get_url: url=https://github.com/bazelbuild/bazel/releases/download/0.1.3/bazel-0.1.3-installer-linux-x86_64.sh dest={{ ansible_env.HOME }}/bazel.sh mode=0544
+            get_url: url=https://github.com/bazelbuild/bazel/releases/download/0.1.4/bazel-0.1.4-installer-linux-x86_64.sh dest={{ ansible_env.HOME }}/bazel.sh mode=0544
         
         -   name: install bazel
             sudo: yes
