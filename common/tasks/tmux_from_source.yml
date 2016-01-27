@@ -1,0 +1,8 @@
+-   name: get tmux 2.1
+    get_url: url=https://github.com/tmux/tmux/releases/download/2.1/tmux-2.1.tar.gz dest={{ ansible_env.HOME}}/tmux-2.1.tar.gz
+
+-   name: unpack tmux 2.1
+    unarchive: src={{ ansible_env.HOME }}/tmux-2.1.tar.gz dest={{ ansible_env.HOME }} creates={{ ansible_env.HOME }}/tmux-2.1/configure copy=no
+
+-   name: build tmux 2.1
+    shell: cd tmux-2.1 && ./configure && make creates={{ ansible_env.HOME }}/tmux-2.1/tmux

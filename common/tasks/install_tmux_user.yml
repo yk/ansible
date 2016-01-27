@@ -1,0 +1,2 @@
+- name: link tmux to home/bin
+  file: dest={{ ansible_env.HOME }}/bin/tmux src={{ ansible_env.HOME }}/tmux-2.1/tmux state=link
