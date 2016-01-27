@@ -1,0 +1,4 @@
+-   hosts: gpu
+
+    tasks:
+        -   include: ../../common/tasks/copy_dotfiles.yml
