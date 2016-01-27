@@ -1,0 +1,6 @@
+-   hosts: brutus
+
+    tasks:
+        -   file: dest={{ ansible_env.HOME}}/bin state=directory
+        -   lineinfile: "dest={{ ansible_env.HOME}}/.bashrc line='export PATH=$HOME/bin:$PATH'"
+        -   include: ../../common/tasks/copy_dotfiles.yml

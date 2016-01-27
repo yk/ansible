@@ -1,0 +1,3 @@
+Host brutus
+    HostName brutus.ethz.ch
+    User ykilcher
