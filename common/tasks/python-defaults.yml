@@ -3,7 +3,7 @@
 
 -   name: install pip
     become: yes
-    shell: python get-pip.py creates=/usr/bin/pip2
+    shell: python2 get-pip.py creates=/usr/bin/pip2
 
 -   name: install python packages
     become: yes
