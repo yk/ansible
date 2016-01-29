@@ -23,10 +23,10 @@
           git: repo=https://github.com/soumith/fblualib dest={{ ansible_env.HOME }}/torch/fblualib update=no
 
         - name: build fblualib
-          shell: "{{ torch_source_cmd }} && cd torch/fblualib && mkdir -p build && cd build && cmake .. && make creates={{ ansible_env.HOME }}/fblualib/fblualib/build/libfblualib.so"
+          shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make creates={{ ansible_env.HOME }}/torch/fblualib/fblualib/build/libfblualib.so"
 
         - name: make rocks
-          shell: "{{ torch_source_cmd }} && cd torch/fblualib && cd {{ item }} && luarocks make rockspec/fb{{ item }}-0.1-1.rockspec"
+          shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && cd {{ item }} && luarocks make rockspec/fb{{ item }}-0.1-1.rockspec"
           with_items:
               -   util 
               -   luaunit 

@@ -222,5 +222,5 @@
 
         - name: install ansible2
           become: yes
-          pip: name=ansible executable=/usr/bin/pip3
+          pip: name=ansible executable=/usr/bin/pip2
 
