@@ -220,3 +220,7 @@
             sudo: yes
             shell: cd fblualib/fblualib/build && make install creates=/usr/local/lib/libfblualib.so
 
+        - name: install ansible2
+          become: yes
+          pip: name=ansible executable=/usr/bin/pip3
+
