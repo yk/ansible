@@ -11,7 +11,7 @@
 
     tasks:
         - name: clone torch repository
-          git: repo=https://github.com/torch/distro.git dest={{ ansible_env.HOME }}/torch update=no
+          git: repo=https://github.com/torch/distro.git dest={{ ansible_env.HOME }}/torch update=no accept_hostkey=yes
 
         - name: install torch
           shell: cd {{ ansible_env.HOME }}/torch && ./install.sh -b -s creates={{ ansible_env.HOME }}/torch/install/bin/torch-activate
