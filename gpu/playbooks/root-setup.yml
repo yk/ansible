@@ -17,26 +17,26 @@
 
   tasks:
     - name: make files directory
-      sudo: yes
+      become: yes
       file: path=/local/files state=directory mode=0755
 
     - name: install gcc
-      sudo: yes
+      become: yes
       shell: dnf install gcc-4.9.2 gcc-c++-4.9.2 gcc-gfortran-4.9.2 --releasever=21 --allowerasing -y creates=/usr/lib/gcc/x86_64-redhat-linux/4.9.2/libstdc++.so
 
     - name: install dnf packages
-      sudo: yes
+      become: yes
       dnf: name=nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,python-tools,python3-tools,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel,zsh,cmake,htop,python-ipython,python3-ipython,pcre,graphviz,ctags,thefuck,autojump,autojump-zsh,libevent,libevent-devel,readline-devel,ncurses-devel,gnuplot,nodejs,npm,ImageMagick,GraphicsMagick-devel,fftw-devel,sox-devel,sox,qt-devel,qtwebkit-devel,czmq,czmq-devel,automake,autoconf,autoconf-archive,libtool,double-conversion-devel,libtool,lz4-devel,lzma-devel,snappy-devel,numactl-libs,numactl-devel,flex,flex-devel,bison,bison-devel,libatomic,cyrus-sasl,cyrus-sasl-devel,libedit,libedit-devel,matio,matio-devel,cowsay,sl,mosh state=present
 
     - name: add rpmfusion free
-      sudo: yes
+      become: yes
       dnf: name=http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch.rpm state=present
 
     - include: ../../common/tasks/python-defaults.yml
     - include: ../../common/tasks/python3-defaults.yml
 
     - name: blacklist nouveau
-      sudo: yes
+      become: yes
       kernel_blacklist: name=nouveau state=present
       register: blnouveau
 
@@ -47,7 +47,7 @@
       get_url: url=http://us.download.nvidia.com/XFree86/Linux-x86_64/358.16/NVIDIA-Linux-x86_64-358.16.run dest={{ ansible_env.HOME }}/nvidia.run mode=0544
 
     - name: install nvidia driver
-      sudo: yes
+      become: yes
       command: "{{ ansible_env.HOME }}/nvidia.run -s"
       args:
         creates: /usr/bin/nvidia-installer
@@ -57,52 +57,52 @@
       when: nvidiadriver.changed
 
     - name: install cuda repositories
-      sudo: yes
+      become: yes
       dnf: name=http://developer.download.nvidia.com/compute/cuda/repos/fedora21/x86_64/cuda-repo-fedora21-7.5-18.x86_64.rpm state=present
 
     - name: install cuda75
-      sudo: yes
+      become: yes
       dnf: name=cuda-7-5 state=present
 
     - name: install cuda7 
-      sudo: yes
+      become: yes
       dnf: name=cuda-7-0 state=present
 
     - name: symlink cuda to cuda7
-      sudo: yes
+      become: yes
       file: src=/usr/local/cuda-7.0 dest=/usr/local/cuda state=link
 
     - name: make cuda7 accept gcc5
-      sudo: yes
+      become: yes
       lineinfile: line='//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported!' regexp="unsupported GNU version" dest=/usr/local/cuda-7.0/include/host_config.h
 
     - name: make cuda75 accept gcc5
-      sudo: yes
+      become: yes
       lineinfile: line='//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported!' regexp="unsupported GNU version" dest=/usr/local/cuda-7.5/include/host_config.h
 
     - name: install pycuda
-      sudo: yes
+      become: yes
       pip: name=pycuda executable=/usr/bin/pip2
       environment: "{{cuda_env}}"
 
     - name: install pycuda3
-      sudo: yes
+      become: yes
       pip: name=pycuda executable=/usr/bin/pip3
       environment: "{{cuda_env}}"
 
     - name: copy cudnn2
-      sudo: yes
+      become: yes
       copy: src=../files/cudnn2.tgz dest=/local/files/cudnn2.tgz mode=0755
 
     - name: copy cudnn3
-      sudo: yes
+      become: yes
       copy: src=../files/cudnn3.tgz dest=/local/files/cudnn3.tgz mode=0755
 
     - name: extract cudnn2
       unarchive: src=/local/files/cudnn2.tgz dest={{ ansible_env.HOME }} creates={{ ansible_env.HOME }}/cudnn-6.5-linux-x64-v2/cudnn.h copy=no
 
     - name: copy cudnn2 files
-      sudo: yes
+      become: yes
       shell: cp {{ ansible_env.HOME }}/cudnn-6.5*/libcudnn* /usr/local/cuda-7.0/lib64/ && cp {{ ansible_env.HOME }}/cudnn-6.5*/cudnn.h /usr/local/cuda-7.0/include/ creates=/usr/local/cuda-7.0/include/cudnn.h
 
     - name: make cudnn3 dir
@@ -112,56 +112,56 @@
       unarchive: src=/local/files/cudnn3.tgz dest={{ ansible_env.HOME }}/cudnn3 creates={{ ansible_env.HOME }}/cudnn3/cuda/include/cudnn.h copy=no
 
     - name: copy cudnn3 files
-      sudo: yes
+      become: yes
       shell: cp {{ ansible_env.HOME }}/cudnn3/cuda/include/* /usr/local/cuda-7.5/include/ && cp {{ ansible_env.HOME }}/cudnn3/cuda/lib64/* /usr/local/cuda-7.5/lib64/ creates=/usr/local/cuda-7.5/include/cudnn.h
 
     - name: download bazel
       get_url: url=https://github.com/bazelbuild/bazel/releases/download/0.1.4/bazel-0.1.4-installer-linux-x86_64.sh dest={{ ansible_env.HOME }}/bazel.sh mode=0544
     
     - name: install bazel
-      sudo: yes
+      become: yes
       command: "{{ ansible_env.HOME }}/bazel.sh creates=/usr/local/bin/bazel"
 
     - name: install tensorflow python2
-      sudo: yes
+      become: yes
       pip: name=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.6.0-cp27-none-linux_x86_64.whl executable=/usr/bin/pip2
       environment: "{{cuda_env}}"
 
     - name: install tensorflow python3
-      sudo: yes
+      become: yes
       pip: name=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.6.0-cp34-none-linux_x86_64.whl executable=/usr/bin/pip3
       environment: "{{cuda_env}}"
     
     - name: make skel bin dir
-      sudo: yes
+      become: yes
       file: path=/etc/skel/bin state=directory mode=0755
 
     - name: modify path to contain cuda stuff
-      sudo: yes
+      become: yes
       lineinfile: dest=/etc/skel/.bashrc line='export PATH="/usr/local/cuda/bin:$PATH"'
 
     - name: modify library path to contain cuda stuff
-      sudo: yes
+      become: yes
       lineinfile: dest=/etc/skel/.bashrc line='export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"'
 
     - name: add cuda include dir to bashrc
-      sudo: yes
+      become: yes
       lineinfile: dest=/etc/skel/.bashrc line='export CUDA_ROOT="/usr/local/cuda"'
 
     - name: add cuda include dir to bashrc
-      sudo: yes
+      become: yes
       lineinfile: dest=/etc/skel/.bashrc line='export CUDA_HOME="/usr/local/cuda"'
 
     - name: modify path to contain HOME/bin
-      sudo: yes
+      become: yes
       lineinfile: dest=/etc/skel/.bashrc line='export PATH="$HOME/bin:$PATH"'
 
     - name: make hofmann-scratch folder in media
-      sudo: yes
+      become: yes
       file: path=/media/hofmann-scratch state=directory
 
     - name: modify fstab to contain scratch
-      sudo: yes
+      become: yes
       lineinfile: dest=/etc/fstab line='scratch-hofmann.inf.ethz.ch:/export/scratch/hofmann/dataset /media/hofmann-scratch nfs defaults 0 0'
 
     - include: ../../common/tasks/tmux_from_source.yml
@@ -184,7 +184,7 @@
       shell: cd folly/folly && autoreconf -ivf && ./configure && make creates={{ ansible_env.HOME }}/folly/folly/.libs/libfolly.so
 
     - name: install folly
-      sudo: yes
+      become: yes
       shell: cd folly/folly && make install && ldconfig creates=/usr/local/lib/libfolly.so
 
     - name: clone fbthrift repository
@@ -194,7 +194,7 @@
       shell: cd fbthrift/thrift && autoreconf -ivf && ./configure && make creates={{ ansible_env.HOME }}/fbthrift/thrift/lib/cpp2/.libs/libthriftcpp2.so
 
     - name: install fbthrift
-      sudo: yes
+      become: yes
       shell: cd fbthrift/thrift && make install creates=/usr/local/lib/libthriftcpp2.so
 
     - name: clone thpp repository
@@ -207,7 +207,7 @@
       shell: "{{ torch_source_cmd }} && cd thpp/thpp && ./build.sh creates={{ ansible_env.HOME }}/thpp/thpp/build/libthpp.so"
 
     - name: install thpp
-      sudo: yes
+      become: yes
       shell: cd thpp/thpp/build && make install creates=/usr/local/lib/libthpp.so
 
     - name: clone fblualib repository
@@ -217,7 +217,7 @@
       shell: "{{ torch_source_cmd }} && cd fblualib/fblualib && mkdir -p build && cd build && cmake .. && make creates={{ ansible_env.HOME }}/fblualib/fblualib/build/libfblualib.so"
 
     - name: install fblualib
-      sudo: yes
+      become: yes
       shell: cd fblualib/fblualib/build && make install creates=/usr/local/lib/libfblualib.so
 
     - name: install ansible2
@@ -235,3 +235,7 @@
       become: yes
       shell: cd nccl && make install creates=/usr/local/lib/libnccl.so
       environment: "{{ cuda75_env }}"
+
+    - name: allow mosh
+      become: yes
+      lineinfile: "dest=/etc/sysconfig/iptables.d/firewall line='-A INPUT -p udp -m multiport --dports 60000:61000 -j ACCEPT'"
