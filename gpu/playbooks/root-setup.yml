@@ -238,4 +238,10 @@
 
     - name: allow mosh
       become: yes
-      lineinfile: "dest=/etc/sysconfig/iptables.d/firewall line='-A INPUT -p udp -m multiport --dports 60000:61000 -j ACCEPT'"
+      lineinfile: "dest=/etc/sysconfig/iptables line='-A INPUT -p udp -m multiport --dports 60000:61000 -j ACCEPT' insertafter='ESTABLISHED'"
+      register: allowmosh
+
+    - name: restart iptables
+      become: yes
+      shell: "service iptables restart"
+      when: allowmosh.changed
