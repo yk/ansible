@@ -1,0 +1,4 @@
+-   hosts: daint
+
+    tasks:
+        -   include: ../../common/tasks/copy_dotfiles.yml

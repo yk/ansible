@@ -1,0 +1,86 @@
+- hosts: daint
+
+  tasks:
+    - name: make bin directory
+      file: path={{ ansible_env.HOME }}/bin state=directory 
+    - name: make lib directory
+      file: path={{ ansible_env.HOME }}/lib state=directory 
+    - name: make include directory
+      file: path={{ ansible_env.HOME }}/include state=directory 
+    - name: add local bin to path
+      lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='export PATH="$HOME/bin:$PATH"'
+    - name: add local lib to path
+      lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='export LD_LIBRARY_PATH="$HOME/lib:$LD_LIBRARY_PATH"'
+    - name: add local include to path
+      lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='export C_INCLUDE_PATH="$HOME/include:$C_INCLUDE_PATH"'
+    - name: load modules every time
+      lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='module load {{item}}' #'
+      with_items:
+          - gcc/4.9.3
+          - python/2.7.6
+          - python/3.4.0
+          - java/jdk1.8.0_51
+          - cudatoolkit/7.0.28-1.0502.10742.5.1
+
+    #- name: clone libevent
+      #git: repo=https://github.com/libevent/libevent dest={{ ansible_env.HOME }}/libevent
+    #- name: build libevent
+      #shell: cd libevent && ./autogen.sh && ./configure --prefix=$HOME && make && make install creates={{ ansible_env.HOME }}/lib/libevent.a
+
+    #- name: get tmux 2.1
+      #get_url: url=https://github.com/tmux/tmux/releases/download/2.1/tmux-2.1.tar.gz dest={{ ansible_env.HOME}}/tmux-2.1.tar.gz
+
+    #- name: unpack tmux 2.1
+      #unarchive: src={{ ansible_env.HOME }}/tmux-2.1.tar.gz dest={{ ansible_env.HOME }} creates={{ ansible_env.HOME }}/tmux-2.1/configure copy=no
+
+    #- name: build tmux 2.1
+      #shell: cd tmux-2.1 && ./configure CFLAGS="-I$HOME/include" LDFLAGS="-L$HOME/lib" && make creates={{ ansible_env.HOME }}/tmux-2.1/tmux
+
+    - name: clone bazel
+      git: repo=https://github.com/bazelbuild/bazel.git dest=bazel update=no version=0.1.1
+      #git: repo=https://github.com/bazelbuild/bazel.git dest=bazel update=no
+
+    - name: patching bazel 
+      lineinfile: dest=bazel/scripts/bootstrap/compile.sh regexp=JAVAC_VERSION state=absent
+    - lineinfile: dest=bazel/scripts/bootstrap/compile.sh insertafter=get_java_version line='JAVA_VERSION=1.8'
+    - lineinfile: dest=bazel/src/main/cpp/blaze_util.cc insertbefore='jvm_version_vect =' line='return true;'
+    - lineinfile: dest=bazel/tools/build_rules/java_rules_skylark.bzl insertafter="javac_options = ctx.fragments.java.default_javac_flags" line='  javac_options= ["-source", "1.8", "-target", "1.8"]' #'
+    - replace: "dest=bazel/tools/cpp/CROSSTOOL replace='tool_path { name: \"cpp\" path: \"/opt/gcc/4.9.3/bin/cpp\" }' regexp='tool_path { name: \"cpp\" path: \"/.*/cpp\" }'"
+    - replace: "dest=bazel/tools/cpp/CROSSTOOL replace='tool_path { name: \"gcc\" path: \"/opt/gcc/4.9.3/bin/gcc\" }' regexp='tool_path { name: \"gcc\" path: \"/.*/gcc\" }'"
+    - lineinfile: "dest=bazel/tools/cpp/CROSSTOOL line='  linker_flag: \"-L/opt/gcc/4.9.3/snos/lib64\"' insertafter='toolchain_identifier: \"local_linux\"'"
+    - lineinfile: "dest=bazel/tools/cpp/CROSSTOOL line='  linker_flag: \"-Wl,-rpath,/opt/gcc/4.9.3/snos/lib64\"' insertafter='linker_flag: \"-L/opt/gcc/4.9.3/snos/lib64\"'"
+    - replace: "dest=bazel/tools/cpp/CROSSTOOL replace='/opt/gcc/4.9.3/snos/lib' regexp='/usr/lib/gcc/'"
+    - replace: "dest=bazel/tools/cpp/CROSSTOOL replace='/opt/gcc/4.9.3/snos/lib64' regexp='/usr/local/include'"
+    - replace: "dest=bazel/tools/cpp/CROSSTOOL replace='/opt/gcc/4.9.3/snos/include' regexp='/usr/include'"
+    - lineinfile: "dest=bazel/scripts/bootstrap/compile.sh line='run_silent \"${CXX}\" -o ${OUTPUT_DIR}/build-runfiles -std=c++0x src/main/tools/build-runfiles.cc -l stdc++ ${LDFLAGS}' regexp='build-runfiles.cc'"
+    - lineinfile: dest=bazel/src/BUILD line='          JAVA_VERSION=$$(echo $${VERSION_LINE} | sed \'s/.*value="\\\\([^"]\\\\)".*/\\\\1/\');' regexp='sed ' #'
+
+    - name: build bazel
+      shell: cd bazel && ./compile.sh creates={{ ansible_env.HOME }}/bazel/output/bazel
+      environment:
+          LDFLAGS: -Wl,-rpath,/opt/gcc/4.9.3/snos/lib64
+
+    - name: link bazel
+      file: dest={{ ansible_env.HOME }}/bin/bazel src={{ ansible_env.HOME }}/bazel/output/bazel state=link
+
+    - name: clone tensorflow
+      git: repo=https://github.com/tensorflow/tensorflow dest=tensorflow update=no
+
+    - name: patch tensorflow
+      lineinfile: "dest=tensorflow/third_party/gpus/crosstool/CROSSTOOL line='  linker_flag: \"-Wl,-rpath,/opt/gcc/4.9.3/snos/lib64\"' insertbefore='cxx_flag: \"-std=c\\+\\+11\"'"
+    - replace: "dest=tensorflow/third_party/gpus/crosstool/CROSSTOOL regexp='/usr/lib/gcc/' replace='/opt/gcc/4.8.2/snos/lib'"
+    - lineinfile: "dest=tensorflow/third_party/gpus/crosstool/CROSSTOOL line='  cxx_builtin_include_directory: \"/opt/gcc/4.8.2/snos/lib64\"' insertafter='cxx_builtin_include_directory: \"/opt/gcc/4.8.2/snos/lib\"'"
+    - lineinfile: dest=tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc regexp='CPU_COMPILER =' line="CPU_COMPILER = ('/opt/gcc/4.9.3/bin/gcc')"
+    - lineinfile: dest=tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc regexp='NVCC_PATH =' line="NVCC_PATH = '/opt/nvidia/cudatoolkit7.0/7.0.28-1.0502.10742.5.1/bin/nvcc'" #"
+    - lineinfile: dest=tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc regexp='GCC_HOST_COMPILER_PATH =' line="GCC_HOST_COMPILER_PATH = ('/opt/gcc/4.9.3/bin/gcc')"
+    - lineinfile: dest=tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc regexp='LLVM_HOST_COMPILER_PATH =' line="LLVM_HOST_COMPILER_PATH = ('/opt/gcc/4.9.3/bin/gcc')"
+    - lineinfile: dest=tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc regexp='\+ PREFIX_DIR' line="  cmd = 'PATH=' + PREFIX_DIR + ':/usr/bin ' + cmd"
+
+    - name: extract cudnn2
+      unarchive: src=../files/cudnn2.tgz dest={{ ansible_env.HOME }} creates={{ ansible_env.HOME }}/cudnn-6.5-linux-x64-v2/cudnn.h
+
+    - name: configure tensorflow
+      shell: cd {{ ansible_env.HOME }}/tensorflow && PYTHON_BIN_PATH=/apps/daint/5.2.UP02/python/3.4.0/bin/python3 TF_NEED_CUDA=1 CUDA_TOOLKIT_PATH=$CRAY_CUDATOOLKIT_DIR CUDNN_INSTALL_PATH=$HOME/cudnn-6.5-linux-x64-v2 ./configure creates={{ ansible_env.HOME }}/tensorflow/tools/python_bin_path.sh
+
+    - name: build tutorials_example_trainer
+      shell: "cd {{ ansible_env.HOME }}/tensorflow && bazel build -c opt --config=cuda --verbose_failures --spawn_strategy=standalone //tensorflow/cc:tutorials_example_trainer creates={{ ansible_env.HOME }}/tensorflow/bazel-bin/tensorflow/cc/tutorials_example_trainer"

@@ -1,0 +1,8 @@
+Host ela
+    HostName ela.cscs.ch
+    User ykilcher
+
+Host daint
+    ProxyCommand ssh -q ela "netcat %h %p"
+    HostName daint.cscs.ch
+    User ykilcher
