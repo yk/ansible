@@ -17,3 +17,6 @@
         -   theano
         -   Pillow
         -   scikit-image
+        -   virtualenv
+        -   sacred
+        -   cython

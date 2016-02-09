@@ -1,0 +1,39 @@
+- hosts: dco
+
+  tasks:
+    - name: create radagrad dir
+      file: path=~/radagrad state=directory
+
+    - name: create lasagne dir
+      file: path=~/radagrad/lasagne state=directory
+
+    - name: install python packages
+      become: yes
+      shell: 'pip install {{ item }}'
+      with_items:
+          - git+https://github.com/yk/fast-jlt.git
+          - git+https://github.com/gabobert/Theano.git
+          - fuel
+          - lasagne
+
+    - name: create theanorc
+      lineinfile: create=yes dest=~/.theanorc line={{ item }}
+      with_items:
+          - "[global]"
+          - "floatX = float32"
+          - "device = cpu"
+
+    - name: create fuelrc
+      lineinfile: create=yes dest=~/.fuelrc line={{ item }}
+      with_items:
+          - 'data_path: "~/data"'
+
+    - name: create data folder
+      file: path=~/data state=directory
+
+    - name: download and convert datasets
+      shell: "cd data && fuel-download {{ item }} && fuel-convert {{ item }}" creates={{ ansible_env.HOME }}/data/mnist.hdf5
+      with_items: 
+          - mnist
+          - cifar10
+          - svhn 2

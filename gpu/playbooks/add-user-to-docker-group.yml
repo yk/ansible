@@ -1,0 +1,12 @@
+-   hosts: gpu
+    
+    vars_prompt:
+        -   name: "username"
+            prompt: "username"
+
+    tasks:
+        -   group: name=docker state=present
+            become: yes
+
+        -   user: name={{ username }} groups=docker append=yes
+            become: yes

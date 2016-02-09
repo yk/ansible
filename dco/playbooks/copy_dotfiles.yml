@@ -1,0 +1,4 @@
+- hosts: dco
+
+  tasks:
+    - include: ../../common/tasks/copy_dotfiles.yml
