@@ -43,50 +43,13 @@
     - name: create bin dir
       file: path=~/bin state=directory mode=0755
 
-
     - name: install dnf packages
       become: yes
-      dnf: name=gcc,gcc-c++,gcc-gfortran,nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,swig,zip,unzip,python-devel,python-tools,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel,zsh,cmake,htop,python-ipython,pcre,graphviz,ctags,autojump,autojump-zsh,libevent,libevent-devel,readline-devel,ncurses-devel,gnuplot,nodejs,npm,ImageMagick,GraphicsMagick-devel,fftw-devel,sox-devel,sox,qt-devel,qtwebkit-devel,czmq,czmq-devel,automake,autoconf,autoconf-archive,libtool,double-conversion-devel,libtool,lz4-devel,lzma-devel,snappy-devel,numactl-libs,numactl-devel,flex,flex-devel,bison,bison-devel,libatomic,cyrus-sasl,cyrus-sasl-devel,libedit,libedit-devel,matio,matio-devel,cowsay,sl,mosh,docker,unzip state=present
+      dnf: name=gcc,gcc-c++,gcc-gfortran,nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python-tools,python3-devel,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel,zsh,cmake,htop,python-ipython,python3-ipython,pcre,graphviz,ctags,autojump,autojump-zsh,libevent,libevent-devel,readline-devel,ncurses-devel,gnuplot,nodejs,npm,ImageMagick,GraphicsMagick-devel,fftw-devel,sox-devel,sox,qt-devel,qtwebkit-devel,czmq,czmq-devel,automake,autoconf,autoconf-archive,libtool,double-conversion-devel,libtool,lz4-devel,lzma-devel,snappy-devel,numactl-libs,numactl-devel,flex,flex-devel,bison,bison-devel,libatomic,cyrus-sasl,cyrus-sasl-devel,libedit,libedit-devel,matio,matio-devel,cowsay,sl,mosh,docker,unzip state=present
 
-    - name: get pip install script
-      shell: curl https://bootstrap.pypa.io/get-pip.py > get-pip.py creates=get-pip.py
-
-    - name: install pip
-      become: yes
-      shell: python2 get-pip.py creates=/usr/bin/pip2
-
-    - name: upgrad pip
-      become: yes
-      shell: pip install --upgrade pip
-
-    - name: install python packages
-      become: yes
-      pip: name={{ item }} executable=/usr/bin/pip2
-      with_items:
-        - requests
-        - numpy
-        - scipy
-        - sklearn
-        - matplotlib
-        - Pillow
-        - scikit-image
-        - virtualenv
-        - sacred
-        - cython
+    - include: ../../common/tasks/python-defaults.yml
+    - include: ../../common/tasks/python3-defaults.yml
 
     - include: ../../common/tasks/tmux_from_source.yml
     - include: ../../common/tasks/install_tmux.yml
-
-    - name: allow mosh
-      become: yes
-      lineinfile: "dest=/etc/sysconfig/iptables line='-A INPUT -p udp -m multiport --dports 60000:61000 -j ACCEPT' insertafter='ESTABLISHED'"
-      register: allowmosh
-
-    - name: restart iptables
-      become: yes
-      service: name=iptables enabled=yes state=restarted
-      when: allowmosh.changed
-
-    - name: create zshrc_local
-      lineinfile: create=yes dest=~/.zshrc_local line='#local zshrc'
 

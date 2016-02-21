@@ -1,0 +1,5 @@
+- hosts: dco
+  tasks:
+      - name: update sacred
+        become: yes
+        shell: "pip3 install --upgrade git+https://github.com/yk/sacred.git"
