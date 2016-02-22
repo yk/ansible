@@ -11,7 +11,7 @@
 
 - name: install python packages
   become: yes
-  pip: name={{ item }} executable=/usr/bin/pip2 extra_args="--upgrade"
+  pip: name={{ item }} editable=no executable=/usr/bin/pip2 extra_args="--upgrade"
   with_items:
    - requests[security]
    - numpy
@@ -23,3 +23,5 @@
    - scikit-image
    - virtualenv
    - cython
+   - fuel
+   - "git+https://github.com/yk/sacred"

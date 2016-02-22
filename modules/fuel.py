@@ -5,12 +5,13 @@ import os
 import subprocess
 
 
-def get_file_name(name):
+def get_file_name(name, directory):
+    fn = '{}.hdf5'.format(name)
     if name == 'svhn 1':
-        return 'svhn_format_1.hdf5'
+        fn = 'svhn_format_1.hdf5'
     if name == 'svhn 2':
-        return 'svhn_format_2.hdf5'
-    return '{}.hdf5'.format(name)
+        fn = 'svhn_format_2.hdf5'
+    return "{}/{}".format(directory, fn)
 
 
 def run_command(cmd):
@@ -26,7 +27,7 @@ def main():
         argument_spec=dict(
             name=dict(required=True, type='str'),
             state=dict(default='present', choices=['present', 'absent'], type='str'),
-            directory=dict(default='~/data', type='str'),
+            directory=dict(default='data', type='str'),
         ),
         supports_check_mode=True
     )
@@ -35,7 +36,7 @@ def main():
     state = module.params['state']
     directory = module.params['directory']
 
-    fn = get_file_name(name)
+    fn = get_file_name(name, directory)
 
     if module.check_mode:
         module.exit_json(changed=(os.path.exists(fn) == (state == 'absent')))
