@@ -25,3 +25,4 @@
    - cython
    - fuel
    - "git+https://github.com/yk/sacred"
+   - lasagne

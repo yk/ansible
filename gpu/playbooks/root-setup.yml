@@ -249,3 +249,7 @@
     - name: ensure docker running
       become: yes
       service: name=docker enabled=yes state=started
+
+    - name: install docker-py
+      become: yes
+      pip: name=docker-py executable=/usr/bin/pip2

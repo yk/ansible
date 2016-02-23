@@ -62,4 +62,9 @@
           - mnist
           - cifar10
           - "svhn 2"
+          - adult
+      tags:
+          - datasets
 
+    - name: copy theanorc
+      copy: src=/Users/yk/.theanorc dest={{ansible_env.HOME}}/.theanorc
