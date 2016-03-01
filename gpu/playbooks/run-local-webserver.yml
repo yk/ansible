@@ -15,9 +15,9 @@
               name: local-web
               docker_api_version: auto
               image: nginx
-              state: started
+              state: reloaded
               volumes:
-                  - "{{ansible_env.HOME}}/web/root:/site:ro"
+                  - "{{ansible_env.HOME}}/web/root:/site:z"
                   - "{{ansible_env.HOME}}/web/nginx.conf:/etc/nginx/conf.d/example.conf:z"
               expose:
                   - 8080
