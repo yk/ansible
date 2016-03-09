@@ -22,7 +22,6 @@
    - scikit-image
    - virtualenv
    - cython
-   - numba
    - "git+https://github.com/yk/fuel"
    - "git+https://github.com/yk/sacred"
    - "git+https://github.com/theano/theano"
