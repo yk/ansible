@@ -18,11 +18,12 @@
    - scipy
    - sklearn
    - matplotlib
-   - theano
    - Pillow
    - scikit-image
    - virtualenv
    - cython
+   - numba
    - "git+https://github.com/yk/fuel"
    - "git+https://github.com/yk/sacred"
-   - lasagne
+   - "git+https://github.com/theano/theano"
+   - "git+https://github.com/lasagne/lasagne"
