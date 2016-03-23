@@ -22,7 +22,3 @@
    - scikit-image
    - virtualenv
    - cython
-   - "git+https://github.com/yk/fuel"
-   - "git+https://github.com/yk/sacred"
-   - "git+https://github.com/theano/theano"
-   - "git+https://github.com/lasagne/lasagne"
