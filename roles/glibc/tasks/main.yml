@@ -1,0 +1,8 @@
+- name: download glibc
+  get_url: url=http://ftp.gnu.org/gnu/glibc/glibc-2.21.tar.gz dest={{ansible_env.HOME}}/libsrc/glibc.tar.gz
+
+- name: untar glibc
+  unarchive: src={{ansible_env.HOME}}/libsrc/glibc.tar.gz copy=no dest={{ansible_env.HOME}}/libsrc creates={{ansible_env.HOME}}/libsrc/glibc-2.21/configure
+
+- name: build glibc
+  shell: cd libsrc/glibc-2.21 ; mkdir -p build ; cd build ; ../configure --prefix={{ansible_env.HOME}}/ext && make && make install

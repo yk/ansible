@@ -1,0 +1,11 @@
+- name: download hdf5 source
+  get_url: url=http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.16.tar.gz dest={{ansible_env.HOME}}/libsrc/hdf5.tar.gz
+
+- name: untar hdf5
+  unarchive: src={{ansible_env.HOME}}/libsrc/hdf5.tar.gz copy=no dest={{ansible_env.HOME}}/libsrc creates={{ansible_env.HOME}}/libsrc/hdf5-1.8.16/configure
+
+- name: build and install hdf5
+  shell: cd libsrc/hdf5-1.8.16 ; ./configure --prefix={{ansible_env.HOME}}/ext && make && make install creates={{ansible_env.HOME}}/ext/lib/libhdf5.so
+
+- name: add hdf5 env variable
+  lineinfile: dest={{ ansible_env.HOME }}/.profile create=yes line='export HDF5_DIR={{ansible_env.HOME}}/ext'

@@ -1,0 +1,22 @@
+- include: copy_dotfiles.yml
+
+- name: make tmp directory
+  file: path={{ ansible_env.HOME }}/tmp state=directory 
+
+- name: make libsrc directory
+  file: path={{ ansible_env.HOME }}/libsrc state=directory 
+
+- name: make git directory
+  file: path={{ ansible_env.HOME }}/git state=directory 
+
+- name: make bin directory
+  file: path={{ ansible_env.HOME }}/bin state=directory 
+
+- name: make lib directory
+  file: path={{ ansible_env.HOME }}/lib state=directory 
+
+- name: make include directory
+  file: path={{ ansible_env.HOME }}/include state=directory 
+
+- name: make ext directory
+  file: path={{ ansible_env.HOME }}/ext state=directory 

@@ -1,0 +1,11 @@
+- name: download python3 source
+  get_url: url=https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tgz validate_certs=no dest={{ansible_env.HOME}}/libsrc/python3.tgz
+
+- name: untar python3
+  unarchive: src={{ansible_env.HOME}}/libsrc/python3.tgz copy=no dest={{ansible_env.HOME}}/libsrc creates={{ansible_env.HOME}}/libsrc/Python-3.5.1/configure
+
+- name: build and install python3
+  shell: cd libsrc/Python-3.5.1 ; ./configure --enable-shared --prefix={{ansible_env.HOME}}/ext && make && make install creates={{ansible_env.HOME}}/ext/bin/python3
+
+- name: upgrade pip3
+  pip: name=pip executable={{ ansible_env.HOME }}/ext/bin/pip3 extra_args="--user --upgrade" state=latest

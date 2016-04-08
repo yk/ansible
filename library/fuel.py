@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
 import os
@@ -6,12 +6,12 @@ import subprocess
 
 
 def get_file_name(name, directory):
-    fn = '{}.hdf5'.format(name)
+    fn = '{0}.hdf5'.format(name)
     if name == 'svhn 1':
         fn = 'svhn_format_1.hdf5'
     if name == 'svhn 2':
         fn = 'svhn_format_2.hdf5'
-    return "{}/{}".format(directory, fn)
+    return "{0}/{1}".format(directory, fn)
 
 
 def run_command(cmd):
@@ -50,21 +50,21 @@ def main():
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    fuel_download_cmd = "fuel-download {} -d {}".format(name, directory)
+    fuel_download_cmd = "fuel-download {0} -d {1}".format(name, directory)
 
     if state == 'absent':
         fuel_download_cmd += " --clear"
 
     out1, err1, rc1 = run_command(fuel_download_cmd)
     if rc1 != 0:
-        module.fail_json(msg="Error while running downloader")
+        module.fail_json(msg="Error while running downloader: " + err1)
 
-    fuel_convert_cmd = "fuel-convert {} -d {} -o {}".format(name, directory, directory)
+    fuel_convert_cmd = "fuel-convert {0} -d {1} -o {1}".format(name, directory)
 
     if state != 'absent':
         out2, err2, rc2 = run_command(fuel_convert_cmd)
         if rc2 != 0:
-            module.fail_json(msg="Error while running converter")
+            module.fail_json(msg="Error while running converter: " + err1)
 
     module.exit_json(changed=True)
 

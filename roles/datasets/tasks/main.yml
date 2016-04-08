@@ -1,0 +1,10 @@
+- name: set up fuelrc
+  lineinfile: "dest={{ansible_env.HOME}}/.fuelrc create=yes state=present line='data_path: \"{{fuel_data_path}}\"' regexp='^data_path'"
+
+- name: get datasets
+  fuel: name={{ item }}
+  with_items:
+      - mnist
+      - cifar10
+      - "svhn 2"
+      - adult

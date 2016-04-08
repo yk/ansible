@@ -1,0 +1,6 @@
+- name: checkout vim repo
+  git: repo=https://github.com/vim/vim.git dest={{ansible_env.HOME}}/libsrc/vim
+
+- name: build and install vim
+  shell: cd libsrc/vim ; ./configure --enable-python3interp --with-features=huge --with-cscope --enable-multibyte --prefix={{ansible_env.HOME}}/ext && make && make install creates={{ansible_env.HOME}}/ext/bin/vim
+

@@ -1,0 +1,10 @@
+-   name: ignore tarball
+    connection: local
+    lineinfile: dest=/Users/yk/git/dotfiles/.gitignore line='dotfiles.tar.gz'
+
+-   name: create tarball
+    connection: local
+    shell: cd /Users/yk/git/dotfiles && tar czf dotfiles.tar.gz .zshrc .oh-my-zsh .vimrc .vim .tmux.conf
+
+-   name: copy and unpack tarball
+    unarchive: src=/Users/yk/git/dotfiles/dotfiles.tar.gz dest={{ ansible_env.HOME }} 

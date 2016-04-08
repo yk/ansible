@@ -1,0 +1,26 @@
+- name: add local bin to path
+  lineinfile: dest={{ ansible_env.HOME }}/.profile line='export PATH="$HOME/bin:$PATH"'
+
+- name: add ext bin to path
+  lineinfile: dest={{ ansible_env.HOME }}/.profile line='export PATH="$HOME/ext/bin:$PATH"'
+
+- name: add python bin to path
+  lineinfile: dest={{ ansible_env.HOME }}/.profile line='export PATH="$HOME/.local/bin:$PATH"'
+
+- name: add local lib to path
+  lineinfile: dest={{ ansible_env.HOME }}/.profile line='export LD_LIBRARY_PATH="$HOME/lib:$LD_LIBRARY_PATH"'
+
+- name: add ext lib to path
+  lineinfile: dest={{ ansible_env.HOME }}/.profile line='export LD_LIBRARY_PATH="$HOME/ext/lib:$LD_LIBRARY_PATH"'
+
+- name: add local include to path
+  lineinfile: dest={{ ansible_env.HOME }}/.profile line='export C_INCLUDE_PATH="$HOME/include:$C_INCLUDE_PATH"'
+
+- name: add ext include to path
+  lineinfile: dest={{ ansible_env.HOME }}/.profile line='export C_INCLUDE_PATH="$HOME/ext/include:$C_INCLUDE_PATH"'
+
+- name: add local python path
+  lineinfile: dest={{ ansible_env.HOME }}/.profile line='export PYTHONPATH="$HOME/.local/lib/python3.4/site-packages:$PYTHONPATH"'
+
+- name: add local python path
+  lineinfile: dest={{ ansible_env.HOME }}/.profile line='export PYTHONPATH="$HOME/.local/lib/python3.4/site-packages:$PYTHONPATH"'

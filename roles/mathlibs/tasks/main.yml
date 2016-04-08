@@ -1,0 +1,8 @@
+- name: download atlas
+  get_url: url='http://downloads.sourceforge.net/project/math-atlas/Stable/3.10.2/atlas3.10.2.tar.bz2' dest={{ ansible_env.HOME }}/atlas.tar.bz2
+
+- name: unpack atlas
+  unarchive: src=atlas.tar.bz2 copy=no dest={{ansible_env.HOME}} creates={{ansible_env.HOME}}/ATLAS/configure
+
+- name: build atlas
+  shell: cd ATLAS ; mkdir -p build ; cd build ; ../configure ; make ; make install --prefix={{ansible_env.HOME}}/lib

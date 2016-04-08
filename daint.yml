@@ -1,0 +1,46 @@
+- hosts: daint
+
+  pre_tasks:
+      - name: create load_modules file
+        lineinfile: dest={{ ansible_env.HOME }}/load_modules.sh create=yes line='module load {{ item }}' #' 
+        with_items:
+            #- openblas
+            - cray-libsci/13.0.4
+            - gcc/4.9.3
+            #- Python/3.4.3-CrayGNU-5.2.40
+            #- Python/2.7.10-CrayGNU-5.2.40
+            #- python/2.7.6
+            - java/jdk1.8.0_51
+            - cudatoolkit/7.0.28-1.0502.10742.5.1
+            #- cray-hdf5
+            #- h5py/2.5.0-CrayGNU-5.2.40-Python-3.4.3-serial
+            #- pycuda/2015.1-CrayGNU-5.2.40-Python-3.4.3
+
+      - name: add load_modules to profile
+        lineinfile: dest={{ ansible_env.HOME }}/.profile create=yes line='source ~/load_modules.sh'
+
+      - name: add paths to math libs to profile
+        lineinfile: dest={{ ansible_env.HOME }}/.profile create=yes line='export {{item}}=/opt/cray/libsci/13.0.4/cray/83/haswell/lib/libsci_cray.so'
+        with_items:
+            - BLAS
+            - LAPACK
+            - ATLAS
+
+
+      - name: make sjobs alias
+        lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='alias sjobs="squeue -u $USER"'
+
+      - name: source profile in bashrc
+        lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='source ~/.profile'
+
+  roles:
+      - common
+      - bash
+      #- { role: glibc, tags: ['run'] }
+      - python3-from-source
+      - vim-from-source
+      - hdf5-from-source
+      #- pip3-userspace
+      - { role: python-user-packages, pip_bin: "{{ansible_env.HOME}}/.local/bin/pip3" }
+      - { role: datasets, fuel_data_path: "{{ansible_env.HOME}}/data" }
+      - { role: theano, device: gpu0, tags: ['run'] }
