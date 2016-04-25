@@ -43,28 +43,28 @@
     - name: create bin dir
       file: path=~/bin state=directory mode=0755
 
-    - name: install dnf packages
-      become: yes
-      dnf: name=gcc,gcc-c++,gcc-gfortran,nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,tar,unzip,python-devel,python-tools,python3-devel,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel,zsh,cmake,htop,python-ipython,python3-ipython,pcre,graphviz,ctags,autojump,autojump-zsh,libevent,libevent-devel,readline-devel,ncurses-devel,gnuplot,nodejs,npm,ImageMagick,GraphicsMagick-devel,fftw-devel,sox-devel,sox,qt-devel,qtwebkit-devel,czmq,czmq-devel,automake,autoconf,autoconf-archive,libtool,double-conversion-devel,libtool,lz4-devel,lzma-devel,snappy-devel,numactl-libs,numactl-devel,flex,flex-devel,bison,bison-devel,libatomic,cyrus-sasl,cyrus-sasl-devel,libedit,libedit-devel,matio,matio-devel,cowsay,sl,mosh,docker,unzip state=present
+    #- name: install dnf packages
+      #become: yes
+      #dnf: name=gcc,gcc-c++,gcc-gfortran,nano,freetype,freetype-devel,lapack,lapack-devel,blas,blas-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,tar,unzip,python-devel,python-tools,python3-devel,git,java-1.8.0-openjdk-devel,zlib-devel,screen,openblas-devel,atlas-devel,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,boost-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,boost-devel,zsh,cmake,htop,python-ipython,python3-ipython,pcre,graphviz,ctags,autojump,autojump-zsh,libevent,libevent-devel,readline-devel,ncurses-devel,gnuplot,nodejs,npm,ImageMagick,GraphicsMagick-devel,fftw-devel,sox-devel,sox,qt-devel,qtwebkit-devel,czmq,czmq-devel,automake,autoconf,autoconf-archive,libtool,double-conversion-devel,libtool,lz4-devel,lzma-devel,snappy-devel,numactl-libs,numactl-devel,flex,flex-devel,bison,bison-devel,libatomic,cyrus-sasl,cyrus-sasl-devel,libedit,libedit-devel,matio,matio-devel,cowsay,sl,mosh,docker,unzip state=present
 
-    - include: ../../common/tasks/python-defaults.yml
-    - include: ../../common/tasks/python3-defaults.yml
+    #- include: ../../common/tasks/python-defaults.yml
+    #- include: ../../common/tasks/python3-defaults.yml
 
-    - include: ../../common/tasks/tmux_from_source.yml
-    - include: ../../common/tasks/install_tmux.yml
+    #- include: ../../common/tasks/tmux_from_source.yml
+    #- include: ../../common/tasks/install_tmux.yml
 
-    - name: set up fuelrc
-      lineinfile: "dest=/local/home/ykilcher/.fuelrc create=yes state=present line='data_path: \"/local/home/ykilcher/data\"'"
+    #- name: set up fuelrc
+      #lineinfile: "dest=/local/home/ykilcher/.fuelrc create=yes state=present line='data_path: \"/local/home/ykilcher/data\"'"
 
-    - name: get datasets
-      fuel: name={{ item }}
-      with_items:
-          - mnist
-          - cifar10
-          - "svhn 2"
-          - adult
-      tags:
-          - datasets
+    #- name: get datasets
+      #fuel: name={{ item }}
+      #with_items:
+          #- mnist
+          #- cifar10
+          #- "svhn 2"
+          #- adult
+      #tags:
+          #- datasets
 
-    - name: copy theanorc
-      copy: src=/Users/yk/.theanorc dest={{ansible_env.HOME}}/.theanorc
+    #- name: copy theanorc
+      #copy: src=/Users/yk/.theanorc dest={{ansible_env.HOME}}/.theanorc
