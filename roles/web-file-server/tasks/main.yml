@@ -1,0 +1,11 @@
+- name: copy webserver run script
+  copy: src=../files/run_webserver.sh dest={{ansible_env.HOME}}/run_webserver.sh
+
+- name: make web dir
+  file: path={{ansible_env.HOME}}/web state=directory
+      
+- name: make web root dir
+  file: path={{ansible_env.HOME}}/web/root state=directory
+
+- name: copy nginx conf
+  copy: src=../files/nginx.conf dest={{ansible_env.HOME}}/web/nginx.conf

@@ -1,0 +1,2 @@
+- name: copy wat run script
+  copy: src=../files/run_wat.sh dest={{ansible_env.HOME}}/run_wat.sh

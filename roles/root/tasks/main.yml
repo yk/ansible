@@ -1,0 +1,43 @@
+- name: make skel bin dir
+  become: yes
+  file: path=/etc/skel/bin state=directory mode=0755
+
+- name: modify path to contain HOME/bin
+  become: yes
+  lineinfile: dest=/etc/skel/.bashrc line='export PATH="$HOME/bin:$PATH"'
+
+- name: make hofmann-scratch folder in media
+  become: yes
+  file: path=/media/hofmann-scratch state=directory
+
+- name: modify fstab to contain scratch
+  become: yes
+  lineinfile: dest=/etc/fstab line='scratch-hofmann.inf.ethz.ch:/export/scratch/hofmann/dataset /media/hofmann-scratch nfs defaults 0 0'
+
+- name: allow mosh
+  become: yes
+  lineinfile: "dest=/etc/sysconfig/iptables line='-A INPUT -p udp -m multiport --dports 60000:61000 -j ACCEPT' insertafter='ESTABLISHED'"
+  register: allowmosh
+
+- name: restart iptables
+  become: yes
+  service: name=iptables enabled=yes state=restarted
+  when: allowmosh.changed
+
+- name: ensure docker running
+  become: yes
+  service: name=docker enabled=yes state=started
+
+- name: install ansible2
+  become: yes
+  pip: name=ansible executable=/usr/bin/pip2
+
+- name: install docker-py
+  become: yes
+  pip: name=docker-py executable=/usr/bin/pip2
+
+- group: name=docker state=present
+  become: yes
+
+- user: name={{ansible_env.USER}} groups=docker append=yes
+  become: yes
