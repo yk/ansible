@@ -4,7 +4,7 @@
       - name: "username"
         prompt: "nethz-username"
 
-  tasks
+  tasks:
       - shell: getent passwd | grep "^{{ username }}:"
         become: yes
 

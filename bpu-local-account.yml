@@ -1,0 +1,24 @@
+- hosts: bpu
+  
+  vars_prompt:
+      - name: "username"
+        prompt: "nethz-username"
+      - name: "group"
+        prompt: "group"
+      - name: "password"
+        prompt: "password"
+
+  tasks:
+      - group: name={{ group }} state=present
+        become: yes
+
+      - user: name={{ username }} group={{ group }} home=/local/home/{{ username }} createhome=no shell=/bin/bash
+        become: yes
+        register: createuser
+
+      - shell: cp -r /etc/skel /local/home/{{ username }} && chown -R {{ username }}:{{ group }} /local/home/{{ username }}
+        become: yes
+        when: createuser.changed
+
+      - shell: echo {{ password }} | passwd --stdin {{ username }}
+        become: yes
