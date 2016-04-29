@@ -26,6 +26,8 @@ def main():
     module = AnsibleModule(
         argument_spec=dict(
             name=dict(required=True, type='str'),
+            download_bin=dict(default='~/.local/bin/fuel-download', type='str'),
+            convert_bin=dict(default='~/.local/bin/fuel-convert', type='str'),
             state=dict(default='present', choices=['present', 'absent'], type='str'),
             directory=dict(default='data', type='str'),
         ),
@@ -35,6 +37,8 @@ def main():
     name = module.params['name']
     state = module.params['state']
     directory = module.params['directory']
+    download_bin = module.params['download_bin']
+    convert_bin = module.params['convert_bin']
 
     fn = get_file_name(name, directory)
 
@@ -50,7 +54,7 @@ def main():
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    fuel_download_cmd = "fuel-download {0} -d {1}".format(name, directory)
+    fuel_download_cmd = "{2} {0} -d {1}".format(name, directory, download_bin)
 
     if state == 'absent':
         fuel_download_cmd += " --clear"
@@ -59,7 +63,7 @@ def main():
     if rc1 != 0:
         module.fail_json(msg="Error while running downloader: " + err1)
 
-    fuel_convert_cmd = "fuel-convert {0} -d {1} -o {1}".format(name, directory)
+    fuel_convert_cmd = "{2} {0} -d {1} -o {1}".format(name, directory, convert_bin)
 
     if state != 'absent':
         out2, err2, rc2 = run_command(fuel_convert_cmd)

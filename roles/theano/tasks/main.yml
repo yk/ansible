@@ -1,4 +1,4 @@
 #needs 'device' variable
 - name: create theanorc
-  template: src=files/theanorc.j2 dest={{ansible_env.HOME}}/.theanorc
+  template: src=files/theanorc.j2 dest={{ansible_env.HOME}}/{{theanorc_fn}}
 

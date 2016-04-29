@@ -1,0 +1,3 @@
+- name: add rpmfusion free
+  become: yes
+  dnf: name=http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch.rpm state=present

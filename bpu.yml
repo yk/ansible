@@ -1,4 +1,4 @@
-- hosts: dco
+- hosts: bpu
 
   remote_user: root
 
@@ -21,13 +21,23 @@
       when: createuser.changed
 
     - name: add user to sudoers
-      lineinfile: "dest=/etc/sudoers.d/sudoers state=present regexp='^{{ username }}' line='{{ username }} ALL=(ALL) NOPASSWD: ALL' create=yes"
+      lineinfile: "dest=/etc/sudoers state=present regexp='^{{ username }}' line='{{ username }} ALL=(ALL) NOPASSWD: ALL'"
 
     - name: add public key
       authorized_key: user={{ username }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}" path="/local/home/{{ username }}/.ssh/authorized_keys"
 
 
-- hosts: dco
+- hosts: bpu
+
+  vars:
+    torch_source_cmd: ". $HOME/torch/install/bin/torch-activate"
+    cuda75_env:
+      CUDA_ROOT: /usr/local/cuda-7.5
+      CUDA_HOME: /usr/local/cuda-7.5
+      CFLAGS: -I/usr/local/cuda-7.5/include 
+      LDFLAGS: -L/usr/local/cuda-7.5/lib64 
+      PATH: "/usr/local/cuda-7.5/bin:{{ ansible_env.PATH }}"
+      LD_LIBRARY_PATH: "/usr/local/cuda-7.5/lib64:{{ ansible_env.LD_LIBRARY_PATH | default('') }}"
 
   roles:
       - common
@@ -39,6 +49,17 @@
       - tmux-from-source
       - { role: python-user-packages, pip_bin: "/usr/bin/pip3", tags: run}
       - { role: datasets, fuel_data_path: "{{ansible_env.HOME}}/data" }
-      - { role: theano, device: cpu}
       - root
-      - { role: pan }
+      - llvm
+      - rpm-fusion-free-22
+      - nvidia-driver
+      - cuda-75
+      - cuda-75-skel
+      #- torch-cuda-75
+      #- fb-torch-libs-cuda-75
+      - { role: theano, device: cpu, theanorc_fn: ".theanoenv"}
+      - { role: theano, device: gpu0, theanorc_fn: ".theanoenv0"}
+      - { role: theano, device: gpu1, theanorc_fn: ".theanoenv1"}
+      - { role: theano, device: gpu2, theanorc_fn: ".theanoenv2"}
+      - { role: theano, device: gpu3, theanorc_fn: ".theanoenv3"}
+      - pan

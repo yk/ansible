@@ -1,2 +1,3 @@
 - name: change shell to zsh
+  become: yes
   user: name={{ansible_env.USER}} shell=/usr/bin/zsh

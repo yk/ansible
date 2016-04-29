@@ -4,6 +4,7 @@
 - name: install python userspace packages
   pip: name={{ item }} editable=no executable={{pip_bin}} extra_args="--user"
   with_items:
+      - xxhash
       - "git+https://github.com/theano/theano"
       - "git+https://github.com/lasagne/lasagne"
       - "git+https://github.com/yk/fuel"

@@ -1,0 +1,23 @@
+- name: make skel bin dir
+  become: yes
+  file: path=/etc/skel/bin state=directory mode=0755
+
+- name: modify path to contain cuda stuff
+  become: yes
+  lineinfile: dest=/etc/skel/.bashrc line='export PATH="/usr/local/cuda/bin:$PATH"'
+
+- name: modify library path to contain cuda stuff
+  become: yes
+  lineinfile: dest=/etc/skel/.bashrc line='export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"'
+
+- name: add cuda include dir to bashrc
+  become: yes
+  lineinfile: dest=/etc/skel/.bashrc line='export CUDA_ROOT="/usr/local/cuda"'
+
+- name: add cuda include dir to bashrc
+  become: yes
+  lineinfile: dest=/etc/skel/.bashrc line='export CUDA_HOME="/usr/local/cuda"'
+
+- name: modify path to contain HOME/bin
+  become: yes
+  lineinfile: dest=/etc/skel/.bashrc line='export PATH="$HOME/bin:$PATH"'
