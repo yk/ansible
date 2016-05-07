@@ -1,30 +1,30 @@
-- hosts: bpu
+#- hosts: bpu
 
-  remote_user: root
+  #remote_user: root
 
-  vars:
-    - username: ykilcher
-    - uid: 123937
-    - groupname: hofmann
-    - gid: 10275
+  #vars:
+    #- username: ykilcher
+    #- uid: 123937
+    #- groupname: hofmann
+    #- gid: 10275
 
-  tasks:
-    - name: create user group
-      group: name={{ groupname }} gid={{ gid }}
+  #tasks:
+    #- name: create user group
+      #group: name={{ groupname }} gid={{ gid }}
 
-    - name: create remote non-root user
-      user: name={{ username }} uid={{ uid }} group={{ groupname }} home=/local/home/{{ username }}
-      register: createuser
+    #- name: create remote non-root user
+      #user: name={{ username }} uid={{ uid }} group={{ groupname }} home=/local/home/{{ username }}
+      #register: createuser
 
-    - name: set password
-      shell: "date +%s | sha256sum | base64 | head -c 32 | passwd --stdin {{ username }}"
-      when: createuser.changed
+    #- name: set password
+      #shell: "date +%s | sha256sum | base64 | head -c 32 | passwd --stdin {{ username }}"
+      #when: createuser.changed
 
-    - name: add user to sudoers
-      lineinfile: "dest=/etc/sudoers state=present regexp='^{{ username }}' line='{{ username }} ALL=(ALL) NOPASSWD: ALL'"
+    #- name: add user to sudoers
+      #lineinfile: "dest=/etc/sudoers state=present regexp='^{{ username }}' line='{{ username }} ALL=(ALL) NOPASSWD: ALL'"
 
-    - name: add public key
-      authorized_key: user={{ username }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}" path="/local/home/{{ username }}/.ssh/authorized_keys"
+    #- name: add public key
+      #authorized_key: user={{ username }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}" path="/local/home/{{ username }}/.ssh/authorized_keys"
 
 
 - hosts: bpu
