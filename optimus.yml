@@ -1,0 +1,5 @@
+- hosts: optimus
+
+  roles:
+      - common
+      - { role: paths, profile_file: ".profile" }

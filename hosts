@@ -5,12 +5,13 @@ daint
 cake
 
 [dco]
-dco-node042
-dco-node043
-dco-node044
-dco-node045
-dco-node046
-dco-node047
+dco-node025
+dco-node026
+dco-node027
+dco-node028
+dco-node029
+dco-node030
+dco-node031
 
 [dco-other-user]
 dco-node048
@@ -20,3 +21,9 @@ dco-head001
 
 [bpu]
 bpu
+
+[bpus]
+bpus
+
+[optimus]
+optimus

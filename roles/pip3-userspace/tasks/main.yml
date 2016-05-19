@@ -1,8 +1,8 @@
 - name: get pip install script
-  get_url: src=https://bootstrap.pypa.io/get-pip.py dest={{ansible_env.HOME}}/libsrc/get-pip.py
+  get_url: url=https://bootstrap.pypa.io/get-pip.py dest={{ansible_env.HOME}}/libsrc/get-pip.py
 
 - name: install pip3
-  shell: . load_modules.sh && python3 libsrc/get-pip.py --user creates={{ ansible_env.HOME }}/.local/bin/pip3
+  shell: python3 libsrc/get-pip.py --user creates={{ ansible_env.HOME }}/.local/bin/pip3
 
 - name: upgrade pip3
   pip: name=pip executable={{ ansible_env.HOME }}/.local/bin/pip3 extra_args="--upgrade"

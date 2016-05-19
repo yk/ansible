@@ -1,0 +1,15 @@
+- hosts: bpus
+
+  environment:
+      C_INCLUDE_PATH: "{{ansible_env.HOME}}/ext/include"
+      LD_LIBRARY_PATH: "{{ansible_env.HOME}}/ext/lib"
+      PATH: "{{ansible_env.PATH}}:{{ansible_env.HOME}}/bin:{{ansible_env.HOME}}/ext/bin"
+
+  roles:
+      - common
+      - { role: paths, profile_file: ".zshenv" }
+      - pip3-userspace
+      - hdf5-from-source
+      - { role: python-user-packages, pip_bin: "{{ansible_env.HOME}}/.local/bin/pip3" }
+      - { role: datasets, fuel_data_path: "{{ansible_env.HOME}}/data" }
+      - ptb
