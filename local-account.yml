@@ -1,11 +1,14 @@
 - hosts: all
   vars_prompt:
       - name: "username"
-        prompt: "nethz-username"
+        prompt: "username"
+        private: no
       - name: "group"
         prompt: "group"
+        private: no
       - name: "password"
         prompt: "password"
+        private: yes
 
   tasks:
       - group: name={{ group }} state=present

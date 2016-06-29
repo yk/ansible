@@ -3,6 +3,7 @@
   vars_prompt:
       - name: "username"
         prompt: "username"
+        private: no
 
   tasks:
       - shell:  restorecon /local/home/{{ username }}/.ssh/authorized_keys && restorecon /local/home/{{ username }}/.ssh

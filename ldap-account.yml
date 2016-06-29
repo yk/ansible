@@ -3,6 +3,7 @@
   vars_prompt:
       - name: "username"
         prompt: "nethz-username"
+        private: no
 
   tasks:
       - shell: getent passwd | grep "^{{ username }}:"
