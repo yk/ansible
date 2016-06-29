@@ -1,6 +1,4 @@
-- hosts: bpu
-  
-  vars_prompt:
+- vars_prompt:
       - name: "username"
         prompt: "nethz-username"
       - name: "group"

@@ -1,13 +1,17 @@
 - name: get pip install script
   shell: curl https://bootstrap.pypa.io/get-pip.py > libsrc/get-pip.py creates=libsrc/get-pip.py
 
-- name: install pip3
+- name: install pip
   become: yes
   shell: "{{python_cmd}} libsrc/get-pip.py creates={{pip_bin}}"
 
 - name: upgrade pip
   become: yes
   pip: name=pip executable={{pip_bin}} extra_args="--upgrade"
+
+- name: install cython
+  become: yes
+  pip: name=cython editable=no executable={{pip_bin}} extra_args="--upgrade"
 
 - name: install python packages
   become: yes

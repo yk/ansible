@@ -24,16 +24,16 @@
   pip: name=pycuda executable=/usr/bin/pip3
   environment: "{{cuda75_env}}"
 
-- name: copy cudnn4
-  copy: src=../files/cudnn4.tgz dest={{ansible_env.HOME}}/libsrc/cudnn4.tgz mode=0755
+- name: copy cudnn5
+  copy: src=../files/cudnn5.tgz dest={{ansible_env.HOME}}/libsrc/cudnn5.tgz mode=0755
 
-- name: make cudnn4 dir
-  file: path={{ ansible_env.HOME }}/libsrc/cudnn4 state=directory
+- name: make cudnn5 dir
+  file: path={{ ansible_env.HOME }}/libsrc/cudnn5 state=directory
 
-- name: extract cudnn4
-  unarchive: src={{ansible_env.HOME}}/libsrc/cudnn4.tgz dest={{ ansible_env.HOME }}/libsrc/cudnn4 creates={{ ansible_env.HOME }}/libsrc/cudnn4/cuda/include/cudnn.h copy=no
+- name: extract cudnn5
+  unarchive: src={{ansible_env.HOME}}/libsrc/cudnn5.tgz dest={{ ansible_env.HOME }}/libsrc/cudnn5 creates={{ ansible_env.HOME }}/libsrc/cudnn5/cuda/include/cudnn.h copy=no
 
-- name: copy cudnn4 files
+- name: copy cudnn5 files
   become: yes
-  shell: cp {{ ansible_env.HOME }}/libsrc/cudnn4/cuda/include/* /usr/local/cuda-7.5/include/ && cp {{ ansible_env.HOME }}/libsrc/cudnn4/cuda/lib64/* /usr/local/cuda-7.5/lib64/ creates=/usr/local/cuda-7.5/include/cudnn.h
+  shell: cp {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/include/* /usr/local/cuda-7.5/include/ && cp {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/lib64/* /usr/local/cuda-7.5/lib64/ creates=/usr/local/cuda-7.5/include/cudnn.h
 

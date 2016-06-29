@@ -1,12 +1,12 @@
 - name: download llvm source
-  get_url: url=http://llvm.org/releases/3.7.0/llvm-3.7.0.src.tar.xz dest={{ ansible_env.HOME }}/libsrc/llvm.tar.xz
+  get_url: url=http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz dest={{ ansible_env.HOME }}/libsrc/llvm.tar.xz
 
 - name: unpack llvm source
-  unarchive: src={{ ansible_env.HOME }}/libsrc/llvm.tar.xz dest={{ ansible_env.HOME }}/libsrc creates={{ ansible_env.HOME }}/libsrc/llvm-3.7.0.src/configure copy=no
+  unarchive: src={{ ansible_env.HOME }}/libsrc/llvm.tar.xz dest={{ ansible_env.HOME }}/libsrc creates={{ ansible_env.HOME }}/libsrc/llvm-3.8.0.src/configure copy=no
 
 - name: build llvm
-  shell: cd libsrc/llvm-3.7.0.src && mkdir -p build && cd build && cmake .. && cmake --build . creates={{ ansible_env.HOME }}/libsrc/llvm-3.7.0.src/build/lib/LLVMHello.so
+  shell: cd libsrc/llvm-3.8.0.src && mkdir -p build && cd build && cmake .. && cmake --build . creates={{ ansible_env.HOME }}/libsrc/llvm-3.8.0.src/build/lib/LLVMHello.so
 
 - name: install llvm
   become: yes
-  shell: cd libsrc/llvm-3.7.0.src/build && cmake --build . --target install creates=/usr/local/bin/llvm-ar
+  shell: cd libsrc/llvm-3.8.0.src/build && cmake --build . --target install creates=/usr/local/bin/llvm-ar

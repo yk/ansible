@@ -1,4 +1,4 @@
-- hosts: bpu
+- hosts: gpu
 
   vars:
     torch_source_cmd: ". $HOME/torch/install/bin/torch-activate"

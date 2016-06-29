@@ -1,0 +1,48 @@
+- name: clone torch repository
+  git: repo=https://github.com/torch/distro.git dest={{ ansible_env.HOME }}/torch update=no accept_hostkey=yes
+
+- name: install torch
+  shell: cd {{ ansible_env.HOME }}/torch && ./install.sh -b -s creates={{ ansible_env.HOME }}/torch/install/bin/torch-activate
+
+- name: clone torch nn repository
+  git: repo=https://github.com/torch/nn dest={{ ansible_env.HOME }}/torch/nn 
+
+- name: clone fblualib repository
+  git: repo=https://github.com/soumith/fblualib dest={{ ansible_env.HOME }}/torch/fblualib update=no
+
+- name: build fblualib
+  shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make creates={{ ansible_env.HOME }}/torch/fblualib/fblualib/build/libfblualib.so"
+
+- name: make rocks
+  shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && cd {{ item }} && luarocks make rockspec/fb{{ item }}-0.1-1.rockspec"
+  with_items:
+      -   util 
+      -   luaunit 
+      -   complex 
+      -   ffivector 
+      -   editline 
+      -   trepl 
+      -   debugger 
+      -   mattorch 
+      -   thrift
+
+- name: build torch nn
+  shell: "{{ torch_source_cmd }} && cd torch/nn && git checkout getParamsByDevice && luarocks make rocks/nn-scm-1.rockspec"
+
+- name: clone fbtorch repository
+  git: repo=https://github.com/facebook/fbtorch.git dest={{ ansible_env.HOME }}/torch/fbtorch 
+
+- name: build fbtorch
+  shell: "{{ torch_source_cmd }} && cd torch/fbtorch && luarocks make rocks/fbtorch-scm-1.rockspec"
+
+- name: clone fbnn repository
+  git: repo=https://github.com/facebook/fbnn.git dest={{ ansible_env.HOME }}/torch/fbnn 
+
+- name: build fbnn
+  shell: "{{ torch_source_cmd }} && cd torch/fbnn && luarocks make rocks/fbnn-scm-1.rockspec"
+
+- name: clone fbcunn repository
+  git: repo=https://github.com/facebook/fbcunn.git dest={{ ansible_env.HOME }}/torch/fbcunn 
+
+- name: build fbcunn
+  shell: "{{ torch_source_cmd }} && cd torch/fbcunn && luarocks make rocks/fbcunn-scm-1.rockspec"

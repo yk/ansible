@@ -1,12 +1,12 @@
-- name: get tmux 2.1
-  get_url: url=https://github.com/tmux/tmux/releases/download/2.1/tmux-2.1.tar.gz dest={{ ansible_env.HOME}}/libsrc/tmux-2.1.tar.gz
+- name: get tmux 2.2
+  get_url: url=https://github.com/tmux/tmux/releases/download/2.2/tmux-2.2.tar.gz dest={{ ansible_env.HOME}}/libsrc/tmux-2.2.tar.gz
 
-- name: unpack tmux 2.1
-  unarchive: src={{ ansible_env.HOME }}/libsrc/tmux-2.1.tar.gz dest={{ ansible_env.HOME }}/libsrc creates={{ ansible_env.HOME }}/libsrc/tmux-2.1/configure copy=no
+- name: unpack tmux 2.2
+  unarchive: src={{ ansible_env.HOME }}/libsrc/tmux-2.2.tar.gz dest={{ ansible_env.HOME }}/libsrc creates={{ ansible_env.HOME }}/libsrc/tmux-2.2/configure copy=no
 
-- name: build tmux 2.1
-  shell: cd libsrc/tmux-2.1 && ./configure && make creates={{ ansible_env.HOME }}/libsrc/tmux-2.1/tmux
+- name: build tmux 2.2
+  shell: cd libsrc/tmux-2.2 && ./configure && make creates={{ ansible_env.HOME }}/libsrc/tmux-2.2/tmux
 
-- name: install tmux 2.1
+- name: install tmux 2.2
   become: yes
-  shell: cd libsrc/tmux-2.1 && make install creates=/usr/local/bin/tmux
+  shell: cd libsrc/tmux-2.2 && make install creates=/usr/local/bin/tmux

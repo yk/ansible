@@ -41,3 +41,7 @@
 
 - user: name={{ansible_env.USER}} groups=docker append=yes
   become: yes
+
+- name: enable performance governor
+  becocme: yes
+  command: "cpupower frequency-set -g performance"
