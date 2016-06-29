@@ -1,0 +1,9 @@
+- hosts: all
+
+  vars_prompt:
+      - name: "username"
+        prompt: "nethz-username"
+
+  tasks:
+      - shell:  restorecon /local/home/{{ username }}/.ssh/authorized_keys && restorecon /local/home/{{ username }}/.ssh
+        become: yes
