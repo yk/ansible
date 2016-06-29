@@ -1,4 +1,6 @@
-- vars_prompt:
+- hosts: all
+
+  vars_prompt:
       - name: "username"
         prompt: "nethz-username"
 
