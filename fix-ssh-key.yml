@@ -2,7 +2,7 @@
 
   vars_prompt:
       - name: "username"
-        prompt: "nethz-username"
+        prompt: "username"
 
   tasks:
       - shell:  restorecon /local/home/{{ username }}/.ssh/authorized_keys && restorecon /local/home/{{ username }}/.ssh
