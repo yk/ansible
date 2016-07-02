@@ -7,6 +7,9 @@
 - name: add python bin to path
   lineinfile: dest={{ ansible_env.HOME }}/{{profile_file}} line='export PATH="$HOME/.local/bin:$PATH"'
 
+- name: add system lib to path
+  lineinfile: dest={{ ansible_env.HOME }}/{{profile_file}} line='export LD_LIBRARY_PATH="/usr/lib:/usr/lib64:/usr/local/lib:/usr/local/lib64:$LD_LIBRARY_PATH"'
+
 - name: add local lib to path
   lineinfile: dest={{ ansible_env.HOME }}/{{profile_file}} line='export LD_LIBRARY_PATH="$HOME/lib:$LD_LIBRARY_PATH"'
 

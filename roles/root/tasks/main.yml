@@ -6,6 +6,10 @@
   become: yes
   lineinfile: dest=/etc/skel/.bashrc line='export PATH="$HOME/bin:$PATH"'
 
+- name: modify ld library path in skel
+  become: yes
+  lineinfile: dest=/etc/skel/.bashrc line='export LD_LIBRARY_PATH="/usr/lib:/usr/lib64:/usr/local/lib:/usr/local/lib64:$LD_LIBRARY_PATH"'
+
 - name: make hofmann-scratch folder in media
   become: yes
   file: path=/media/hofmann-scratch state=directory
@@ -42,6 +46,19 @@
 - user: name={{ansible_env.USER}} groups=docker append=yes
   become: yes
 
+#- name: disable intel cpu governor
+  #become: yes
+  #lineinfile: "dest=/etc/default/grub line='GRUB_CMDLINE_LINUX=\"rd.lvm.lv=fedorasys/root rd.lvm.lv=fedorasys/swap nodmraid rhgb quiet rd.shell=0 intel_pstate=disable\"' regexp='^GRUB_CMDLINE_LINUX'"
+  #register: intelgovernor
+
+#- name: reconfigure grub
+  #become: yes
+  #command: "grub2-mkconfig -o /boot/grub2/grub.cfg"
+  #when: intelgovernor.changed
+
+#- include: ../../common/tasks/reboot.yml
+  #when: intelgovernor.changed
+
 - name: enable performance governor
-  becocme: yes
+  become: yes
   command: "cpupower frequency-set -g performance"

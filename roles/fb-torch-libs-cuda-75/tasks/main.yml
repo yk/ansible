@@ -1,8 +1,8 @@
 - name: clone folly repository
   git: repo=https://github.com/facebook/folly.git dest={{ ansible_env.HOME }}/libsrc/folly depth=1 version=v0.35.0 update=no
 
-- name: change folly build
-  lineinfile: "dest={{ ansible_env.HOME }}/libsrc/folly/folly/m4/ax_boost_context.m4 regexp='fcontext_t' line='                [[boost::context::fcontext_t fc = boost::context::make_fcontext(0, 0, 0);]])],'"
+#- name: change folly build
+  #lineinfile: "dest={{ ansible_env.HOME }}/libsrc/folly/folly/m4/ax_boost_context.m4 regexp='fcontext_t' line='                [[boost::context::fcontext_t fc = boost::context::make_fcontext(0, 0, 0);]])],'"
 
 - name: build folly
   shell: cd libsrc/folly/folly && autoreconf -ivf && ./configure && make creates={{ ansible_env.HOME }}/libsrc/folly/folly/.libs/libfolly.so
@@ -10,6 +10,17 @@
 - name: install folly
   become: yes
   shell: cd libsrc/folly/folly && make install && ldconfig creates=/usr/local/lib/libfolly.so
+
+#- name: clone wangle repository
+  #git: repo=https://github.com/facebook/wangle.git dest={{ ansible_env.HOME }}/libsrc/wangle depth=1 update=no
+
+#- name: build wangle
+  #shell: cd libsrc/wangle/wangle && cmake . && make creates={{ ansible_env.HOME }}/libsrc/wangle/wangle/lib/libwangle.a
+
+#- name: install wangle
+  #become: yes
+  #shell: cd libsrc/wangle/wangle && make install creates=/usr/local/lib/libwangle.a
+
 
 - name: clone fbthrift repository
   git: repo=https://github.com/facebook/fbthrift.git dest={{ ansible_env.HOME }}/libsrc/fbthrift depth=1 version=v0.24.0 update=no
@@ -22,7 +33,7 @@
   shell: cd libsrc/fbthrift/thrift && make install creates=/usr/local/lib/libthriftcpp2.so
 
 - name: clone thpp repository
-  git: repo=https://github.com/facebook/thpp dest={{ ansible_env.HOME }}/libsrc/thpp update=no
+  git: repo=https://github.com/facebook/thpp dest={{ ansible_env.HOME }}/libsrc/thpp update=no version=v1.0
 
 - name: change thpp build
   lineinfile: "dest={{ ansible_env.HOME }}/libsrc/thpp/thpp/build.sh line='sudo make install' state=absent"
@@ -35,7 +46,7 @@
   shell: cd libsrc/thpp/thpp/build && make install creates=/usr/local/lib/libthpp.so
 
 - name: clone fblualib repository
-  git: repo=https://github.com/soumith/fblualib dest={{ ansible_env.HOME }}/libsrc/fblualib update=no
+  git: repo=https://github.com/facebook/fblualib dest={{ ansible_env.HOME }}/libsrc/fblualib update=no version=v1.0
 
 - name: build fblualib
   shell: "{{ torch_source_cmd }} && cd libsrc/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make creates={{ ansible_env.HOME }}/libsrc/fblualib/fblualib/build/libfblualib.so"

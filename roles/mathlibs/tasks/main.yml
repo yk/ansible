@@ -1,22 +1,63 @@
-- name: download atlas
-  get_url: url='http://downloads.sourceforge.net/project/math-atlas/Stable/3.10.2/atlas3.10.2.tar.bz2' dest={{ ansible_env.HOME }}/libsrc/atlas.tar.bz2
+#- name: download atlas
+  #get_url: url='http://downloads.sourceforge.net/project/math-atlas/Stable/3.10.2/atlas3.10.2.tar.bz2' dest={{ ansible_env.HOME }}/libsrc/atlas.tar.bz2
 
-- name: download lapack
-  get_url: url='http://www.netlib.org/lapack/lapack-3.6.1.tgz' dest={{ ansible_env.HOME }}/libsrc/lapack.tgz
+#- name: download lapack
+  #get_url: url='http://www.netlib.org/lapack/lapack-3.6.1.tgz' dest={{ ansible_env.HOME }}/libsrc/lapack.tgz
 
-- name: unpack atlas
-  unarchive: src={{ansible_env.HOME}}/libsrc/atlas.tar.bz2 copy=no dest={{ansible_env.HOME}}/libsrc creates={{ansible_env.HOME}}/libsrc/ATLAS/configure
+#- name: unpack atlas
+  #unarchive: src={{ansible_env.HOME}}/libsrc/atlas.tar.bz2 copy=no dest={{ansible_env.HOME}}/libsrc creates={{ansible_env.HOME}}/libsrc/ATLAS/configure
 
-- name: build atlas
+#- name: build atlas
+  #shell: cd libsrc/ATLAS ; mkdir -p build ; cd build ; ../configure --with-netlib-lapack-tarfile=$HOME/libsrc/lapack.tgz --prefix=/usr --shared && make creates={{ansible_env.HOME}}/libsrc/ATLAS/build/lib/liblapack.a
+
+#- name: install atlas
+  #become: yes
+  #shell: cd libsrc/ATLAS ; cd build ; make install creates=/usr/lib/liblapack.a
+
+- name: download openblas
+  get_url: url='http://github.com/xianyi/OpenBLAS/archive/v0.2.18.tar.gz' dest={{ ansible_env.HOME }}/libsrc/openblas.tar.gz
+
+- name: unpack openblas
+  unarchive: src={{ansible_env.HOME}}/libsrc/openblas.tar.gz copy=no dest={{ansible_env.HOME}}/libsrc creates={{ansible_env.HOME}}/libsrc/OpenBLAS-0.2.18/CMakeLists.txt
+
+- name: build openblas
+  shell: cd libsrc/OpenBLAS-0.2.18 ; cmake . && make creates={{ansible_env.HOME}}/libsrc/OpenBLAS-0.2.18/lib/libopenblas.so
+
+- name: install openblas
   become: yes
-  shell: "cd libsrc/ATLAS ; mkdir -p build ; cd build ; ../configure --with-netlib-lapack-tarfile=$HOME/libsrc/lapack.tgz && make && make install" #TODO: creates
+  shell: cd libsrc/OpenBLAS-0.2.18 ; cd lib ; cp libopenblas.a libopenblas.so libopenblas.so.0 libopenblas.so.0.2 /usr/lib/ creates=/usr/lib/libopenblas.so
+
 
 - name: download fftw
   get_url: url='http://www.fftw.org/fftw-3.3.4.tar.gz' dest={{ansible_env.HOME}}/libsrc/fftw.tar.gz
 
 - name: unpack fftw
-  unarchive: src={{ansible_env.HOME}}/libsrc/fftw.tar.gz copy=no dest={{ansible_env.HOME}}/libsrc creates=libsrc/fftw-3.3.4/configure
+  unarchive: src={{ansible_env.HOME}}/libsrc/fftw.tar.gz copy=no dest={{ansible_env.HOME}}/libsrc creates={{ansible_env.HOME}}/libsrc/fftw-3.3.4/configure
+
+- name: build fftwf
+  shell: cd libsrc/fftw-3.3.4 ; ./configure --enable-float --enable-sse --enable-sse2 --enable-avx --enable-shared && make creates={{ansible_env.HOME}}/libsrc/fftw-3.3.4/.libs/libfftw3f.so
+
+- name: install fftwf
+  become: yes
+  shell: cd libsrc/fftw-3.3.4 ; make install creates=/usr/local/lib/libfftw3f.so
 
 - name: build fftw
+  shell: cd libsrc/fftw-3.3.4 ; ./configure --enable-sse2 --enable-avx --enable-shared && make creates={{ansible_env.HOME}}/libsrc/fftw-3.3.4/.libs/libfftw3.so
+
+- name: install fftw
   become: yes
-  shell: "cd libsrc/fftw-3.3.4 ; ./configure && make && make install" #TODO: creates
+  shell: cd libsrc/fftw-3.3.4 ; make install creates=/usr/local/lib/libfftw3.so
+
+- name: download eigen
+  get_url: url='http://bitbucket.org/eigen/eigen/get/3.2.8.tar.bz2' dest={{ansible_env.HOME}}/libsrc/eigen.tar.gz
+
+- name: unpack eigen
+  unarchive: src={{ansible_env.HOME}}/libsrc/eigen.tar.gz copy=no dest={{ansible_env.HOME}}/libsrc creates={{ansible_env.HOME}}/libsrc/eigen-eigen-07105f7124f9/CMakeLists.txt
+
+- name: build eigen
+  shell: cd libsrc/eigen-eigen-07105f7124f9 ; mkdir -p build ; cd build ; cmake .. creates={{ansible_env.HOME}}/libsrc/eigen-eigen-07105f7124f9/build/Makefile
+
+- name: install eigen
+  become: yes
+  shell: cd libsrc/eigen-eigen-07105f7124f9/build ; make install creates=/usr/local/include/eigen3/Eigen/Eigen
+
