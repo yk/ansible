@@ -8,10 +8,10 @@
   git: repo=https://github.com/torch/nn dest={{ ansible_env.HOME }}/torch/nn 
 
 - name: clone fblualib repository
-  git: repo=https://github.com/soumith/fblualib dest={{ ansible_env.HOME }}/torch/fblualib update=no
+  git: repo=https://github.com/soumith/fblualib dest={{ ansible_env.HOME }}/torch/fblualib update=no version=v1.0
 
-- name: build fblualib
-  shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make creates={{ ansible_env.HOME }}/torch/fblualib/fblualib/build/libfblualib.so"
+#- name: build fblualib
+  #shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make creates={{ ansible_env.HOME }}/torch/fblualib/fblualib/build/libfblualib.so"
 
 - name: make rocks
   shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && cd {{ item }} && luarocks make rockspec/fb{{ item }}-0.1-1.rockspec"
@@ -24,7 +24,6 @@
       -   trepl 
       -   debugger 
       -   mattorch 
-      -   python
       -   thrift
 
 - name: build torch nn
