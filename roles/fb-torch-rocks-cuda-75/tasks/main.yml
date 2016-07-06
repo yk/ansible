@@ -30,19 +30,19 @@
   shell: "{{ torch_source_cmd }} && cd torch/nn && git checkout getParamsByDevice && luarocks make rocks/nn-scm-1.rockspec"
 
 - name: clone fbtorch repository
-  git: repo=https://github.com/facebook/fbtorch.git dest={{ ansible_env.HOME }}/torch/fbtorch 
+  git: repo=https://github.com/facebook/fbtorch.git dest={{ ansible_env.HOME }}/torch/fbtorch version=v1.0
 
 - name: build fbtorch
   shell: "{{ torch_source_cmd }} && cd torch/fbtorch && luarocks make rocks/fbtorch-scm-1.rockspec"
 
 - name: clone fbnn repository
-  git: repo=https://github.com/facebook/fbnn.git dest={{ ansible_env.HOME }}/torch/fbnn 
+  git: repo=https://github.com/facebook/fbnn.git dest={{ ansible_env.HOME }}/torch/fbnn version=v1.0
 
 - name: build fbnn
   shell: "{{ torch_source_cmd }} && cd torch/fbnn && luarocks make rocks/fbnn-scm-1.rockspec"
 
 - name: clone fbcunn repository
-  git: repo=https://github.com/facebook/fbcunn.git dest={{ ansible_env.HOME }}/torch/fbcunn 
+  git: repo=https://github.com/facebook/fbcunn.git dest={{ ansible_env.HOME }}/torch/fbcunn version=v1.0
 
 - name: build fbcunn
   shell: "{{ torch_source_cmd }} && cd torch/fbcunn && luarocks make rocks/fbcunn-scm-1.rockspec"
