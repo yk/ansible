@@ -17,7 +17,7 @@
   become: yes
   pip: name={{ item }} editable=no executable={{pip_bin}} extra_args="--upgrade"
   environment:
-      LD_LIBRARY_PATH: "{{ansible_env.LD_LIBRARY_PATH}}:/usr/lib"
+      LD_LIBRARY_PATH: "/usr/lib"
   with_items:
    - requests[security]
    - virtualenv

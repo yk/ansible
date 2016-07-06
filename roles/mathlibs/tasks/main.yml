@@ -25,7 +25,7 @@
 
 - name: install openblas
   become: yes
-  shell: cd libsrc/OpenBLAS-0.2.18 ; cd lib ; cp libopenblas.a libopenblas.so libopenblas.so.0 libopenblas.so.0.2 /usr/lib/ creates=/usr/lib/libopenblas.so
+  shell: cd libsrc/OpenBLAS-0.2.18 ; cd lib ; cp libopenblas.a libopenblas.so.0.2 /usr/lib/ && cd /usr/lib && ln -s libopenblas.so.0.2 libopenblas.so.0 && ln -s libopenblas.so.0 libopenblas.so creates=/usr/lib/libopenblas.so
 
 
 - name: download fftw
