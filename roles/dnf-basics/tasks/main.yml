@@ -1,15 +1,16 @@
 - name: install python2-dnf
   become: yes
-  shell: dnf install -y python2 python2-dnf libselinux-python
+  shell: dnf install -y python2 python2-dnf libselinux-python creates=/usr/lib/python2.7/site-packages/dnf/__init__.py
 
 - name: uninstall math libs
   become: yes
   dnf: name=blas,openblas,fftw,lapack state=absent
 
-- include: ./f21-packages.yml
+- name: add f21 repository
+  become: yes
+  yum_repository: name=fedora21 description='Fedora 21 Repo' mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=fedora-21&arch=x86_64 enabled=yes skip_if_unavailable=no gpgcheck=yes gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-21-x86_64 metadata_expire=28d
 
 - name: install dnf packages
   become: yes
-  dnf: name=nano,freetype,freetype-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,bzip2,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,python-tools,python3-tools,git,java-1.8.0-openjdk-devel,zlib-devel,screen,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,zsh,cmake,htop,pcre,ctags,autojump,autojump-zsh,libevent,libevent-devel,readline-devel,ncurses-devel,nodejs,npm,ImageMagick,GraphicsMagick-devel,sox-devel,sox,qt-devel,qtwebkit-devel,make,automake,autoconf,autoconf-archive,libtool,double-conversion-devel,libtool,lz4-devel,lzma-devel,snappy-devel,numactl-libs,numactl-devel,flex,flex-devel,bison,bison-devel,libatomic,cyrus-sasl,cyrus-sasl-devel,libedit,libedit-devel,matio,matio-devel,cowsay,sl,mosh,smem,tree,scala,kernel-tools,scons state=present
+  dnf: name=gcc-4.9.2,gcc-c++-4.9.2,gcc-gfortran-4.9.2,libstdc++-4.9.2,libstdc++-devel-4.9.2,libstdc++-static-4.9.2,boost-devel-1.55.0,czmq-devel-1.4.1,graphviz-2.38.0,gnuplot-4.6.5,nano,freetype,freetype-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,bzip2,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,python-tools,python3-tools,git,java-1.8.0-openjdk-devel,zlib-devel,screen,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,zsh,cmake,htop,pcre,ctags,autojump,autojump-zsh,libevent,libevent-devel,readline-devel,ncurses-devel,nodejs,npm,ImageMagick,GraphicsMagick-devel,sox-devel,sox,qt-devel,qtwebkit-devel,make,automake,autoconf,autoconf-archive,libtool,double-conversion-devel,libtool,lz4-devel,lzma-devel,snappy-devel,numactl-libs,numactl-devel,flex,flex-devel,bison,bison-devel,libatomic,cyrus-sasl,cyrus-sasl-devel,libedit,libedit-devel,matio,matio-devel,cowsay,sl,mosh,smem,tree,scala,kernel-tools,scons,docker state=present
 
-- include: ./f21-packages.yml

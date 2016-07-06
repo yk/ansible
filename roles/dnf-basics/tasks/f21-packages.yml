@@ -1,3 +1,0 @@
-- name: install f21 packages
-  become: yes
-  shell: dnf install gcc-4.9.2 gcc-c++-4.9.2 gcc-gfortran-4.9.2 libstdc++-4.9.2 libstdc++-devel-4.9.2 libstdc++-static-4.9.2 boost-devel-1.55.0 docker-io-1.8.2 czmq-devel-1.4.1 graphviz-2.38.0 gnuplot-4.6.5 --releasever=21 --allowerasing -y creates=/usr/lib/gcc/x86_64-redhat-linux/4.9.2/libstdc++.so
