@@ -3,4 +3,4 @@
 
 - name: install torch
   environment: "{{ cuda75_env }}"
-  shell: cd {{ ansible_env.HOME }}/torch && ./install.sh -b -s creates={{ ansible_env.HOME }}/torch/install/bin/th
+  shell: cd {{ ansible_env.HOME }}/torch && ./install.sh -b creates={{ ansible_env.HOME }}/torch/install/bin/th
