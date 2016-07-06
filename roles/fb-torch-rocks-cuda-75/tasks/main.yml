@@ -8,7 +8,7 @@
   git: repo=https://github.com/torch/nn dest={{ ansible_env.HOME }}/torch/nn 
 
 - name: clone fblualib repository
-  git: repo=https://github.com/soumith/fblualib dest={{ ansible_env.HOME }}/torch/fblualib update=no version=v1.0
+  git: repo=https://github.com/facebook/fblualib dest={{ ansible_env.HOME }}/torch/fblualib update=no version=v1.0
 
 #- name: build fblualib
   #shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make creates={{ ansible_env.HOME }}/torch/fblualib/fblualib/build/libfblualib.so"
