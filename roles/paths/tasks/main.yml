@@ -22,8 +22,8 @@
 - name: add ext include to path
   lineinfile: dest={{ ansible_env.HOME }}/{{profile_file}} line='export C_INCLUDE_PATH="$HOME/ext/include:$C_INCLUDE_PATH"'
 
-- name: add local python path
-  lineinfile: dest={{ ansible_env.HOME }}/{{profile_file}} line='export PYTHONPATH="$HOME/.local/lib/python3.4/site-packages:$PYTHONPATH"'
+#- name: add local python path
+  #lineinfile: dest={{ ansible_env.HOME }}/{{profile_file}} line='export PYTHONPATH="$HOME/.local/lib/python3.4/site-packages:$PYTHONPATH"'
 
-- name: add local python path
-  lineinfile: dest={{ ansible_env.HOME }}/{{profile_file}} line='export PYTHONPATH="$HOME/.local/lib/python3.4/site-packages:$PYTHONPATH"'
+#- name: add local python path
+  #lineinfile: dest={{ ansible_env.HOME }}/{{profile_file}} line='export PYTHONPATH="$HOME/.local/lib/python3.4/site-packages:$PYTHONPATH"'

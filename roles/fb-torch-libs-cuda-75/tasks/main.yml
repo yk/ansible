@@ -1,36 +1,42 @@
 - name: clone folly repository
-  git: repo=https://github.com/facebook/folly.git dest={{ ansible_env.HOME }}/libsrc/folly depth=1 version=v0.35.0 update=no
+  git: repo=https://github.com/facebook/folly.git dest={{ ansible_env.HOME }}/libsrc/folly depth=1 update=no version=v0.35.0
 
 #- name: change folly build
   #lineinfile: "dest={{ ansible_env.HOME }}/libsrc/folly/folly/m4/ax_boost_context.m4 regexp='fcontext_t' line='                [[boost::context::fcontext_t fc = boost::context::make_fcontext(0, 0, 0);]])],'"
 
 - name: build folly
-  shell: cd libsrc/folly/folly && autoreconf -ivf && ./configure && make creates={{ ansible_env.HOME }}/libsrc/folly/folly/.libs/libfolly.so
+  shell: cd libsrc/folly/folly && autoreconf -ivf && ./configure && make -j14 creates={{ ansible_env.HOME }}/libsrc/folly/folly/.libs/libfolly.so
+  register: buildfolly_result
 
 - name: install folly
   become: yes
-  shell: cd libsrc/folly/folly && make install && ldconfig creates=/usr/local/lib/libfolly.so
+  shell: cd libsrc/folly/folly && make install && ldconfig
+  when: buildfolly_result.changed
 
 #- name: clone wangle repository
   #git: repo=https://github.com/facebook/wangle.git dest={{ ansible_env.HOME }}/libsrc/wangle depth=1 update=no
 
 #- name: build wangle
-  #shell: cd libsrc/wangle/wangle && cmake . && make creates={{ ansible_env.HOME }}/libsrc/wangle/wangle/lib/libwangle.a
+  #shell: cd libsrc/wangle/wangle && cmake . && make -j14 creates={{ ansible_env.HOME }}/libsrc/wangle/wangle/lib/libwangle.a
+  #register: buildwangle_result
 
 #- name: install wangle
   #become: yes
-  #shell: cd libsrc/wangle/wangle && make install creates=/usr/local/lib/libwangle.a
+  #shell: cd libsrc/wangle/wangle && make install
+  #when: buildwangle_result.changed
 
 
 - name: clone fbthrift repository
-  git: repo=https://github.com/facebook/fbthrift.git dest={{ ansible_env.HOME }}/libsrc/fbthrift depth=1 version=v0.24.0 update=no
+  git: repo=https://github.com/facebook/fbthrift.git dest={{ ansible_env.HOME }}/libsrc/fbthrift depth=1 update=no version=v0.24.0
 
 - name: build fbthrift
-  shell: cd libsrc/fbthrift/thrift && autoreconf -ivf && ./configure && make creates={{ ansible_env.HOME }}/libsrc/fbthrift/thrift/lib/cpp2/.libs/libthriftcpp2.so
+  shell: cd libsrc/fbthrift/thrift && autoreconf -ivf && ./configure && make -j14 creates={{ ansible_env.HOME }}/libsrc/fbthrift/thrift/lib/cpp2/.libs/libthriftcpp2.so
+  register: buildfbthrift_result
 
 - name: install fbthrift
   become: yes
-  shell: cd libsrc/fbthrift/thrift && make install creates=/usr/local/lib/libthriftcpp2.so
+  shell: "cd libsrc/fbthrift/thrift && make install && chown -R {{ansible_env.USER}}: {{ansible_env.HOME}}/libsrc/fbthrift/thrift"
+  when: buildfbthrift_result.changed
 
 - name: clone thpp repository
   git: repo=https://github.com/facebook/thpp dest={{ ansible_env.HOME }}/libsrc/thpp update=no version=v1.0
@@ -40,20 +46,24 @@
 
 - name: build thpp
   shell: "{{ torch_source_cmd }} && cd libsrc/thpp/thpp && ./build.sh creates={{ ansible_env.HOME }}/libsrc/thpp/thpp/build/libthpp.so"
+  register: buildthpp_result
 
 - name: install thpp
   become: yes
-  shell: cd libsrc/thpp/thpp/build && make install creates=/usr/local/lib/libthpp.so
+  shell: "cd libsrc/thpp/thpp/build && make install && chown -R {{ansible_env.USER}}: {{ansible_env.HOME}}/torch/install/include"
+  when: buildthpp_result.changed
 
 - name: clone fblualib repository
   git: repo=https://github.com/facebook/fblualib dest={{ ansible_env.HOME }}/libsrc/fblualib update=no version=v1.0
 
 - name: build fblualib
-  shell: "{{ torch_source_cmd }} && cd libsrc/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make creates={{ ansible_env.HOME }}/libsrc/fblualib/fblualib/build/libfblualib.so"
+  shell: "{{ torch_source_cmd }} && cd libsrc/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make -j14 creates={{ ansible_env.HOME }}/libsrc/fblualib/fblualib/build/libfblualib.so"
+  register: buildfblualib_result
 
 - name: install fblualib
   become: yes
-  shell: cd libsrc/fblualib/fblualib/build && make install creates=/usr/local/lib/libfblualib.so
+  shell: "cd libsrc/fblualib/fblualib/build && make install && chown -R {{ansible_env.USER}}: {{ansible_env.HOME}}/torch/install/include"
+  when: buildfblualib_result.changed
 
 - name: install ansible2
   become: yes
@@ -63,10 +73,12 @@
   git: repo=https://github.com/NVIDIA/nccl.git dest={{ ansible_env.HOME }}/libsrc/nccl
 
 - name: build nccl
-  shell: cd libsrc/nccl && make creates={{ ansible_env.HOME }}/libsrc/nccl/build/lib/libnccl.so
+  shell: cd libsrc/nccl && make -j14 creates={{ ansible_env.HOME }}/libsrc/nccl/build/lib/libnccl.so
   environment: "{{ cuda75_env }}"
+  register: buildnccl_result
 
 - name: install nccl
   become: yes
-  shell: cd libsrc/nccl && make install creates=/usr/local/lib/libnccl.so
+  shell: cd libsrc/nccl && make install
   environment: "{{ cuda75_env }}"
+  when: buildnccl_result.changed

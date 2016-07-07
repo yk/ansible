@@ -5,7 +5,7 @@
   shell: cd {{ ansible_env.HOME }}/torch && ./install.sh -b creates={{ ansible_env.HOME }}/torch/install/bin/torch-activate
 
 - name: clone torch nn repository
-  git: repo=https://github.com/torch/nn dest={{ ansible_env.HOME }}/torch/nn 
+  git: repo=https://github.com/torch/nn dest={{ ansible_env.HOME }}/torch/nn update=no version=getParamsByDevice
 
 - name: clone fblualib repository
   git: repo=https://github.com/facebook/fblualib dest={{ ansible_env.HOME }}/torch/fblualib update=no version=v1.0
@@ -25,24 +25,28 @@
       -   debugger 
       -   mattorch 
       -   thrift
+      #-   torch
 
 - name: build torch nn
-  shell: "{{ torch_source_cmd }} && cd torch/nn && git checkout getParamsByDevice && luarocks make rocks/nn-scm-1.rockspec"
+  shell: "{{ torch_source_cmd }} && cd torch/nn && luarocks make rocks/nn-scm-1.rockspec"
 
 - name: clone fbtorch repository
-  git: repo=https://github.com/facebook/fbtorch.git dest={{ ansible_env.HOME }}/torch/fbtorch version=v1.0
+  git: repo=https://github.com/facebook/fbtorch.git dest={{ ansible_env.HOME }}/torch/fbtorch update=no version=v1.0
 
 - name: build fbtorch
   shell: "{{ torch_source_cmd }} && cd torch/fbtorch && luarocks make rocks/fbtorch-scm-1.rockspec"
 
 - name: clone fbnn repository
-  git: repo=https://github.com/facebook/fbnn.git dest={{ ansible_env.HOME }}/torch/fbnn version=v1.0
+  git: repo=https://github.com/facebook/fbnn.git dest={{ ansible_env.HOME }}/torch/fbnn update=no version=v1.0
 
 - name: build fbnn
   shell: "{{ torch_source_cmd }} && cd torch/fbnn && luarocks make rocks/fbnn-scm-1.rockspec"
 
+- name: update cutorch and cunn
+  shell: "{{ torch_source_cmd }} && cd torch && luarocks install cunn && luarocks install cutorch"
+
 - name: clone fbcunn repository
-  git: repo=https://github.com/facebook/fbcunn.git dest={{ ansible_env.HOME }}/torch/fbcunn version=v1.0
+  git: repo=https://github.com/facebook/fbcunn.git dest={{ ansible_env.HOME }}/torch/fbcunn update=no
 
 - name: build fbcunn
   shell: "{{ torch_source_cmd }} && cd torch/fbcunn && luarocks make rocks/fbcunn-scm-1.rockspec"
