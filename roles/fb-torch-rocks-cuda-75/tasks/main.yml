@@ -43,7 +43,7 @@
   shell: "{{ torch_source_cmd }} && cd torch/fbnn && luarocks make rocks/fbnn-scm-1.rockspec"
 
 - name: update cutorch and cunn
-  shell: "{{ torch_source_cmd }} && cd torch && luarocks install cunn && luarocks install cutorch"
+  shell: "{{ torch_source_cmd }} && cd torch && luarocks install cutorch && luarocks install cunn"
 
 - name: clone fbcunn repository
   git: repo=https://github.com/facebook/fbcunn.git dest={{ ansible_env.HOME }}/torch/fbcunn update=no
