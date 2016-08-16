@@ -7,13 +7,13 @@
   when: blnouveau.changed
 
 - name: download nvidia driver installer
-  get_url: url=http://us.download.nvidia.com/XFree86/Linux-x86_64/367.27/NVIDIA-Linux-x86_64-367.27.run dest={{ ansible_env.HOME }}/libsrc/nvidia.run mode=0544
+  get_url: url=http://us.download.nvidia.com/XFree86/Linux-x86_64/367.35/NVIDIA-Linux-x86_64-367.35.run dest={{ ansible_env.HOME }}/libsrc/nvidia.run mode=0544
 
 - name: install nvidia driver
   become: yes
   command: "{{ ansible_env.HOME }}/libsrc/nvidia.run -s"
   args:
-    creates: /usr/bin/nvidia-installer
+    creates: /usr/bin/nvidia-settings
   register: nvidiadriver
 
 - include: ../../common/tasks/reboot.yml

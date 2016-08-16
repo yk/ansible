@@ -21,3 +21,7 @@
 - name: modify path to contain HOME/bin
   become: yes
   lineinfile: dest=/etc/skel/.bashrc line='export PATH="$HOME/bin:$PATH"'
+
+- name: set omp num threads
+  become: yes
+  lineinfile: dest=/etc/skel/.bashrc line='export OMP_NUM_THREADS=3'
