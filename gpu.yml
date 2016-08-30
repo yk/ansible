@@ -23,8 +23,7 @@
       - { role: python-root-packages, python_cmd: "python2", pip_bin: "/usr/bin/pip2" }
       - { role: python-root-packages, python_cmd: "python3", pip_bin: "/usr/bin/pip3" }
       - { role: python-user-packages, pip_bin: "/usr/bin/pip3", tags: run}
-      #- { role: datasets, fuel_data_path: "{{ansible_env.HOME}}/data" }
-      #- rpm-fusion-free-22
+      - { role: datasets, fuel_data_path: "{{ansible_env.HOME}}/data" }
       - nvidia-driver
       - cuda-75
       - cuda-75-skel

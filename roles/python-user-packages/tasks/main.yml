@@ -12,7 +12,7 @@
       - "git+https://github.com/lasagne/lasagne"
       #- "git+https://github.com/yk/fuel"
       - "git+https://github.com/WoLpH/python-progressbar"
-      #- "git+https://github.com/mila-udem/fuel"
+      - "git+https://github.com/mila-udem/fuel"
       - "git+https://github.com/yk/sacred"
       - "git+https://github.com/yk/nestedtotensor"
       #- "git+https://github.com/yk/fast-jlt"
