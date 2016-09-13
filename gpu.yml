@@ -36,3 +36,4 @@
       - { role: theano, device: gpu2, theanorc_fn: ".theanoenv2"}
       - { role: theano, device: gpu3, theanorc_fn: ".theanoenv3"}
       - tensorflow-from-source
+      - opencv-from-source
