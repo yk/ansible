@@ -62,3 +62,7 @@
 - name: enable performance governor
   become: yes
   command: "cpupower frequency-set -g performance"
+
+- name: set selinux permissive
+  become: yes
+  command: "setenforce Permissive"

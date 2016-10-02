@@ -2,4 +2,4 @@
   git: repo=https://github.com/opencv/opencv.git dest={{ansible_env.HOME}}/libsrc/opencv update=no
 
 - name: build and install opencv
-  shell: "cd libsrc/opencv ; mkdir -p build ; cd build ; cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX={{ansible_env.HOME}}/ext -D PYTHON3_EXECUTABLE=/usr/bin/python3 -D PYTHON3_PACKAGES_PATH=$HOME/.local/lib/python3.4/site-packages/ .. && make -j8 && make install"
+  shell: "cd libsrc/opencv ; mkdir -p build ; cd build ; cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX={{ansible_env.HOME}}/ext -D PYTHON3_EXECUTABLE=/usr/bin/python3 -D PYTHON3_PACKAGES_PATH=$HOME/.local/lib/python3.4/site-packages/ .. && make -j8 && make install creates={{ansible_env.HOME}}/ext/lib/libopencv_core.so" 

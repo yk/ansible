@@ -8,11 +8,7 @@
 
 - name: symlink cuda to cuda
   become: yes
-  file: src=/usr/local/cuda-8 dest=/usr/local/cuda state=link
-
-#- name: make cuda75 accept gcc5
-  #become: yes
-  #lineinfile: line='//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported!' regexp="unsupported GNU version" dest=/usr/local/cuda-7.5/include/host_config.h
+  file: src=/usr/local/cuda-8.0 dest=/usr/local/cuda state=link
 
 - name: install pycuda
   become: yes
@@ -35,5 +31,5 @@
 
 - name: copy cudnn5 files
   become: yes
-  shell: cp {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/include/* /usr/local/cuda/include/ && cp {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/lib64/* /usr/local/cuda/lib64/ creates=/usr/local/cuda/include/cudnn.h
+  shell: cp {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/include/* /usr/local/cuda/include/ && cp -a {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/lib64/* /usr/local/cuda/lib64/ creates=/usr/local/cuda/include/cudnn.h
 

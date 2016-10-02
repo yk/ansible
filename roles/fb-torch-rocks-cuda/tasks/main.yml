@@ -5,13 +5,35 @@
   shell: cd {{ ansible_env.HOME }}/torch && ./install.sh -b creates={{ ansible_env.HOME }}/torch/install/bin/torch-activate
 
 - name: clone torch nn repository
-  git: repo=https://github.com/torch/nn dest={{ ansible_env.HOME }}/torch/nn update=no version=getParamsByDevice
+  git: repo=https://github.com/torch/nn dest={{ ansible_env.HOME }}/torch/nn update=no 
+
+- name: clone thpp repository
+  git: repo=https://github.com/facebook/thpp dest={{ ansible_env.HOME }}/torch/thpp update=no
+
+- name: change thpp build
+  lineinfile: "dest={{ ansible_env.HOME }}/torch/thpp/thpp/build.sh line='make install' state=absent"
+
+- name: change thpp build more
+  lineinfile: "dest={{ ansible_env.HOME }}/torch/thpp/thpp/build.sh line='FB=\"$FB -DCMAKE_CXX_STANDARD=14 -DNO_TESTS=1\"' state=present insertafter='cd build'"
+
+- name: build thpp
+  shell: "{{ torch_source_cmd }} && cd torch/thpp/thpp && ./build.sh creates={{ ansible_env.HOME }}/torch/thpp/thpp/build/libthpp.so"
+  register: buildthpp_result
+
+- name: install thpp
+  shell: "cd torch/thpp/thpp/build && make install"
+  when: buildthpp_result.changed
 
 - name: clone fblualib repository
-  git: repo=https://github.com/facebook/fblualib dest={{ ansible_env.HOME }}/torch/fblualib update=no version=v1.0
+  git: repo=https://github.com/facebook/fblualib dest={{ ansible_env.HOME }}/torch/fblualib update=no 
 
-#- name: build fblualib
-  #shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make creates={{ ansible_env.HOME }}/torch/fblualib/fblualib/build/libfblualib.so"
+- name: build fblualib
+  shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make -j14 creates={{ ansible_env.HOME }}/torch/fblualib/fblualib/build/libfblualib.so"
+  register: buildfblualib_result
+
+- name: install fblualib
+  shell: "cd torch/fblualib/fblualib/build && make install"
+  when: buildfblualib_result.changed
 
 - name: make rocks
   shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && cd {{ item }} && luarocks make rockspec/fb{{ item }}-0.1-1.rockspec"
@@ -31,19 +53,21 @@
   shell: "{{ torch_source_cmd }} && cd torch/nn && luarocks make rocks/nn-scm-1.rockspec"
 
 - name: clone fbtorch repository
-  git: repo=https://github.com/facebook/fbtorch.git dest={{ ansible_env.HOME }}/torch/fbtorch update=no version=v1.0
+  git: repo=https://github.com/facebook/fbtorch.git dest={{ ansible_env.HOME }}/torch/fbtorch update=no
 
 - name: build fbtorch
   shell: "{{ torch_source_cmd }} && cd torch/fbtorch && luarocks make rocks/fbtorch-scm-1.rockspec"
 
 - name: clone fbnn repository
-  git: repo=https://github.com/facebook/fbnn.git dest={{ ansible_env.HOME }}/torch/fbnn update=no version=v1.0
+  git: repo=https://github.com/facebook/fbnn.git dest={{ ansible_env.HOME }}/torch/fbnn update=no
 
 - name: build fbnn
   shell: "{{ torch_source_cmd }} && cd torch/fbnn && luarocks make rocks/fbnn-scm-1.rockspec"
 
 - name: update cutorch and cunn
   shell: "{{ torch_source_cmd }} && cd torch && luarocks install cutorch && luarocks install cunn"
+  environment:
+      CMAKE_CXX_STANDARD: 98
 
 - name: clone fbcunn repository
   git: repo=https://github.com/facebook/fbcunn.git dest={{ ansible_env.HOME }}/torch/fbcunn update=no

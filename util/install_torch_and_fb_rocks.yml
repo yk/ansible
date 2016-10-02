@@ -2,13 +2,13 @@
   
   vars:
     torch_source_cmd: ". $HOME/torch/install/bin/torch-activate"
-    cuda75_env:
-      CUDA_ROOT: /usr/local/cuda-7.5
-      CUDA_HOME: /usr/local/cuda-7.5
-      CFLAGS: -I/usr/local/cuda-7.5/include 
-      LDFLAGS: -L/usr/local/cuda-7.5/lib64 
-      PATH: "/usr/local/cuda-7.5/bin:{{ ansible_env.PATH }}"
-      LD_LIBRARY_PATH: "/usr/local/cuda-7.5/lib64:{{ ansible_env.LD_LIBRARY_PATH | default('') }}"
+    cuda_env:
+      CUDA_ROOT: /usr/local/cuda
+      CUDA_HOME: /usr/local/cuda
+      CFLAGS: -I/usr/local/cuda/include 
+      LDFLAGS: -L/usr/local/cuda/lib64 
+      PATH: "/usr/local/cuda/bin:{{ ansible_env.PATH }}"
+      LD_LIBRARY_PATH: "/usr/local/cuda/lib64:{{ ansible_env.LD_LIBRARY_PATH | default('') }}"
 
   tasks:
       - include: fbtasks.yml
