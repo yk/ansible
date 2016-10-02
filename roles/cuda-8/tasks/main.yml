@@ -1,0 +1,39 @@
+- name: install cuda repositories
+  become: yes
+  dnf: name=http://developer.download.nvidia.com/compute/cuda/repos/fedora23/x86_64/cuda-repo-fedora23-8.0.44-1.x86_64.rpm state=present
+
+- name: install cuda8
+  become: yes
+  dnf: name=cuda state=present
+
+- name: symlink cuda to cuda
+  become: yes
+  file: src=/usr/local/cuda-8 dest=/usr/local/cuda state=link
+
+#- name: make cuda75 accept gcc5
+  #become: yes
+  #lineinfile: line='//#error -- unsupported GNU version! gcc versions later than 4.9 are not supported!' regexp="unsupported GNU version" dest=/usr/local/cuda-7.5/include/host_config.h
+
+- name: install pycuda
+  become: yes
+  pip: name=pycuda executable=/usr/bin/pip2
+  environment: "{{cuda_env}}"
+
+- name: install pycuda3
+  become: yes
+  pip: name=pycuda executable=/usr/bin/pip3
+  environment: "{{cuda_env}}"
+
+- name: copy cudnn5
+  copy: src=../files/cudnn5.tgz dest={{ansible_env.HOME}}/libsrc/cudnn5.tgz mode=0755
+
+- name: make cudnn5 dir
+  file: path={{ ansible_env.HOME }}/libsrc/cudnn5 state=directory
+
+- name: extract cudnn5
+  unarchive: src={{ansible_env.HOME}}/libsrc/cudnn5.tgz dest={{ ansible_env.HOME }}/libsrc/cudnn5 creates={{ ansible_env.HOME }}/libsrc/cudnn5/cuda/include/cudnn.h copy=no
+
+- name: copy cudnn5 files
+  become: yes
+  shell: cp {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/include/* /usr/local/cuda/include/ && cp {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/lib64/* /usr/local/cuda/lib64/ creates=/usr/local/cuda/include/cudnn.h
+

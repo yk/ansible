@@ -2,5 +2,5 @@
   git: repo=https://github.com/torch/distro.git dest={{ ansible_env.HOME }}/torch update=no accept_hostkey=yes
 
 - name: install torch
-  environment: "{{ cuda75_env }}"
+  environment: "{{ cuda_env }}"
   shell: cd {{ ansible_env.HOME }}/torch && ./install.sh -b creates={{ ansible_env.HOME }}/torch/install/bin/th

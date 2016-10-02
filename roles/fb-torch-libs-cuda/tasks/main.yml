@@ -74,11 +74,11 @@
 
 - name: build nccl
   shell: cd libsrc/nccl && make -j14 creates={{ ansible_env.HOME }}/libsrc/nccl/build/lib/libnccl.so
-  environment: "{{ cuda75_env }}"
+  environment: "{{ cuda_env }}"
   register: buildnccl_result
 
 - name: install nccl
   become: yes
   shell: cd libsrc/nccl && make install
-  environment: "{{ cuda75_env }}"
+  environment: "{{ cuda_env }}"
   when: buildnccl_result.changed
