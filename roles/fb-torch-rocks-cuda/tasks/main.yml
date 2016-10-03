@@ -35,6 +35,9 @@
   shell: "cd torch/fblualib/fblualib/build && make install"
   when: buildfblualib_result.changed
 
+- name: change fblualib torch build
+  lineinfile: "dest={{ ansible_env.HOME }}/torch/fblualib/fblualib/torch/CMakeLists.txt line='TARGET_LINK_LIBRARIES(async_rng ${FOLLY_LIBRARIES} fblualib zstd)' state=present regexp='TARGET_LINK_LIBRARIES'"
+
 - name: make rocks
   shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && cd {{ item }} && luarocks make rockspec/fb{{ item }}-0.1-1.rockspec"
   with_items:
@@ -47,7 +50,9 @@
       -   debugger 
       -   mattorch 
       -   thrift
-      #-   torch
+
+- name: make torch rock
+  shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && cd torch && luarocks make rockspec/fb_torch-0.1-1.rockspec"
 
 - name: build torch nn
   shell: "{{ torch_source_cmd }} && cd torch/nn && luarocks make rocks/nn-scm-1.rockspec"
