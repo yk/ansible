@@ -10,14 +10,6 @@
   become: yes
   lineinfile: dest=/etc/skel/.bashrc line='export LD_LIBRARY_PATH="/usr/lib:/usr/lib64:/usr/local/lib:/usr/local/lib64:$LD_LIBRARY_PATH"'
 
-- name: make hofmann-scratch folder in media
-  become: yes
-  file: path=/media/hofmann-scratch state=directory
-
-- name: modify fstab to contain scratch
-  become: yes
-  lineinfile: dest=/etc/fstab line='scratch-hofmann.inf.ethz.ch:/export/scratch/hofmann/dataset /media/hofmann-scratch nfs defaults 0 0'
-
 - name: allow mosh
   become: yes
   lineinfile: "dest=/etc/sysconfig/iptables line='-A INPUT -p udp -m multiport --dports 60000:61000 -j ACCEPT' insertafter='ESTABLISHED'"

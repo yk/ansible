@@ -16,6 +16,7 @@
       - zsh
       - llvm
       - root
+      - scratch
       - { role: paths, profile_file: ".zshenv" }
       - tmux-from-source
       - mathlibs

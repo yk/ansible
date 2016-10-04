@@ -1,0 +1,8 @@
+- name: make hofmann-scratch folder in media
+  become: yes
+  file: path=/media/hofmann-scratch state=directory
+
+- name: modify fstab to contain scratch
+  become: yes
+  lineinfile: dest=/etc/fstab line='scratch-hofmann.inf.ethz.ch:/export/scratch/hofmann/dataset /media/hofmann-scratch nfs defaults 0 0'
+
