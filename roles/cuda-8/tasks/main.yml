@@ -33,3 +33,6 @@
   become: yes
   shell: cp {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/include/* /usr/local/cuda/include/ && cp -a {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/lib64/* /usr/local/cuda/lib64/ creates=/usr/local/cuda/include/cudnn.h
 
+- name: set compute mode
+  become: yes
+  shell: "nvidia-smi -c 3"

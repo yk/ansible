@@ -1,3 +1,7 @@
+- name: install dnf packages
+  become: yes
+  dnf: name=lvm2,lvm2-libs state=present
+
 - name: reboot
   become: yes
   shell: sleep 2 && shutdown -r now "Ansible updates triggered"
