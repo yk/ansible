@@ -6,7 +6,9 @@
 
 - name: build llvm
   shell: cd libsrc/llvm-3.8.0.src && mkdir -p build && cd build && cmake .. && make -j14 creates={{ ansible_env.HOME }}/libsrc/llvm-3.8.0.src/build/lib/LLVMHello.so
+  register: buildllvmresult
 
 - name: install llvm
   become: yes
-  shell: cd libsrc/llvm-3.8.0.src/build && make install creates=/usr/local/bin/llvm-ar
+  shell: cd libsrc/llvm-3.8.0.src/build && make install 
+  when: buildllvmresult.changed

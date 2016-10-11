@@ -22,10 +22,12 @@
 
 - name: build openblas
   shell: cd libsrc/OpenBLAS-0.2.18 ; cmake . && make creates={{ansible_env.HOME}}/libsrc/OpenBLAS-0.2.18/lib/libopenblas.so
+  register: buildopenblasresult
 
 - name: install openblas
   become: yes
-  shell: cd libsrc/OpenBLAS-0.2.18 ; cd lib ; cp libopenblas.a libopenblas.so.0.2 /usr/lib/ && cd /usr/lib && ln -s libopenblas.so.0.2 libopenblas.so.0 && ln -s libopenblas.so.0 libopenblas.so creates=/usr/lib/libopenblas.so
+  shell: cd libsrc/OpenBLAS-0.2.18 ; cd lib ; cp libopenblas.a libopenblas.so.0.2 /usr/lib/ && cd /usr/lib && ln -fs libopenblas.so.0.2 libopenblas.so.0 && ln -fs libopenblas.so.0 libopenblas.so 
+  when: buildopenblasresult.changed
 
 
 - name: download fftw
@@ -36,17 +38,21 @@
 
 - name: build fftwf
   shell: cd libsrc/fftw-3.3.4 ; ./configure --enable-float --enable-sse --enable-sse2 --enable-avx --enable-shared && make creates={{ansible_env.HOME}}/libsrc/fftw-3.3.4/.libs/libfftw3f.so
+  register: buildfftwfresult
 
 - name: install fftwf
   become: yes
-  shell: cd libsrc/fftw-3.3.4 ; make install creates=/usr/local/lib/libfftw3f.so
+  shell: cd libsrc/fftw-3.3.4 ; make install 
+  when: buildfftwfresult.changed
 
 - name: build fftw
   shell: cd libsrc/fftw-3.3.4 ; ./configure --enable-sse2 --enable-avx --enable-shared && make creates={{ansible_env.HOME}}/libsrc/fftw-3.3.4/.libs/libfftw3.so
+  register: buildfftwresult
 
 - name: install fftw
   become: yes
-  shell: cd libsrc/fftw-3.3.4 ; make install creates=/usr/local/lib/libfftw3.so
+  shell: cd libsrc/fftw-3.3.4 ; make install 
+  when: buildfftwresult.changed
 
 - name: download eigen
   get_url: url='http://bitbucket.org/eigen/eigen/get/3.2.8.tar.bz2' dest={{ansible_env.HOME}}/libsrc/eigen.tar.gz
@@ -56,8 +62,10 @@
 
 - name: build eigen
   shell: cd libsrc/eigen-eigen-07105f7124f9 ; mkdir -p build ; cd build ; cmake .. creates={{ansible_env.HOME}}/libsrc/eigen-eigen-07105f7124f9/build/Makefile
+  register: buildeigenresult
 
 - name: install eigen
   become: yes
-  shell: cd libsrc/eigen-eigen-07105f7124f9/build ; make install creates=/usr/local/include/eigen3/Eigen/Eigen
+  shell: cd libsrc/eigen-eigen-07105f7124f9/build ; make install 
+  when: buildeigenresult.changed
 
