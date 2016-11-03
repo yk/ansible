@@ -19,6 +19,11 @@ dco-node048
 [dco-head]
 dco-head001
 
+[research]
+gpu
+grinder
+bpu
+
 [gpus]
 gpu
 grinder

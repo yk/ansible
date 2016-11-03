@@ -12,5 +12,12 @@
 
 - name: install dnf packages
   become: yes
-  dnf: name=gcc,gcc-c++,gcc-gfortran,libstdc++,libstdc++-devel,libstdc++-static,lvm2,lvm2-libs,boost-devel,czmq-devel,graphviz,gnuplot,nano,freetype,freetype-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,bzip2,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,python-tools,python3-tools,git,java,maven,zlib-devel,screen,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,opencv-python,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,zsh,cmake,htop,pcre,ctags,autojump,autojump-zsh,libevent,libevent-devel,readline-devel,ncurses-devel,nodejs,npm,ImageMagick,GraphicsMagick-devel,sox-devel,sox,qt-devel,qtwebkit-devel,make,automake,autoconf,autoconf-archive,libtool,double-conversion-devel,libtool,lz4-devel,lzma-devel,snappy-devel,numactl-libs,numactl-devel,flex,flex-devel,bison,bison-devel,libatomic,cyrus-sasl,cyrus-sasl-devel,libedit,libedit-devel,matio,matio-devel,cowsay,sl,mosh,smem,tree,scala,kernel-tools,scons,net-tools,sysstat,docker state=present
+  dnf: name=gcc,gcc-c++,gcc-gfortran,libstdc++,libstdc++-devel,libstdc++-static,lvm2,lvm2-libs,boost-devel,czmq-devel,graphviz,gnuplot,nano,freetype,freetype-devel,libffi,libffi-devel,libpng,libpng-devel,libtiff-devel,libjpeg-turbo-devel,libzip-devel,bzip2,lcms2-devel,libwebp-devel,tcl-devel,tk-devel,openssl-devel,wget,curl,vim,python,python3,swig,zip,unzip,python-devel,python3-devel,python-tools,python3-tools,git,java,maven,zlib-devel,screen,protobuf-devel,leveldb-devel,snappy-devel,lmdb-devel,opencv-devel,opencv-python,hdf5-devel,gflags-devel,glog-devel,kernel-devel,kernel-headers,dkms,acpid,emacs,zsh,cmake,htop,pcre,ctags,autojump,autojump-zsh,libevent,libevent-devel,readline-devel,ncurses-devel,nodejs,npm,ImageMagick,GraphicsMagick-devel,sox-devel,sox,qt-devel,qtwebkit-devel,make,automake,autoconf,autoconf-archive,libtool,double-conversion-devel,libtool,lz4-devel,lzma-devel,snappy-devel,numactl-libs,numactl-devel,flex,flex-devel,bison,bison-devel,libatomic,cyrus-sasl,cyrus-sasl-devel,libedit,libedit-devel,matio,matio-devel,cowsay,sl,mosh,smem,tree,scala,kernel-tools,scons,net-tools,sysstat,docker-engine,postgresql,postgresql-devel state=present
 
+- name: install nvidia-docker
+  become: yes
+  dnf: name=https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.0-rc.3/nvidia-docker-1.0.0.rc.3-1.x86_64.rpm state=present
+
+- name: mark lvm2 installed
+  become: yes
+  command: dnf mark install lvm2
