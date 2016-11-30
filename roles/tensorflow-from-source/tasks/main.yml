@@ -1,5 +1,5 @@
 - name: get bazel installer
-  get_url: url=https://github.com/bazelbuild/bazel/releases/download/0.3.2/bazel-0.3.2-installer-linux-x86_64.sh dest={{ ansible_env.HOME}}/libsrc/install_bazel.sh mode=0744
+  get_url: url=https://github.com/bazelbuild/bazel/releases/download/0.4.0/bazel-0.4.0-installer-linux-x86_64.sh dest={{ ansible_env.HOME}}/libsrc/install_bazel.sh mode=0744
 
 - name: install bazel
   shell: cd libsrc && ./install_bazel.sh --user creates={{ansible_env.HOME}}/bin/bazel
@@ -8,10 +8,10 @@
   git: repo=https://github.com/tensorflow/tensorflow dest={{ ansible_env.HOME }}/libsrc/tensorflow update=no accept_hostkey=yes
 
 - name: build tensorflow
-  shell: cd libsrc/tensorflow && printf '/usr/bin/python3\n\n\n/usr/lib/python3.4/site-packages\ny\n\n\n\n\n\n\n' | ./configure && bazel build -c opt --config=cuda //tensorflow/cc:tutorials_example_trainer && bazel build -c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package && mkdir -p tmp && bazel-bin/tensorflow/tools/pip_package/build_pip_package $PWD/tmp/tensorflow_pkg creates={{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-0.11.0rc1-py3-none-any.whl
+  shell: cd libsrc/tensorflow && printf '/usr/bin/python3\n\n\n/usr/lib/python3.4/site-packages\n\ny\n\n\n\n\n\n\n' | ./configure && bazel build -c opt --config=cuda //tensorflow/cc:tutorials_example_trainer && bazel build -c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package && mkdir -p tmp && bazel-bin/tensorflow/tools/pip_package/build_pip_package $PWD/tmp/tensorflow_pkg creates={{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-0.11.0-cp34-cp34m-linux_x86_64.whl
 
 - name: install tensorflow
-  pip: name='file://{{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-0.11.0rc1-py3-none-any.whl' extra_args='--user --upgrade' executable=/usr/bin/pip3
+  pip: name='file://{{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-0.11.0-cp34-cp34m-linux_x86_64.whl' extra_args='--user --upgrade' executable=/usr/bin/pip3
 
 - name: install prettytensor
   pip: name='git+https://github.com/google/prettytensor' extra_args='--user --upgrade' executable=/usr/bin/pip3 editable=false
