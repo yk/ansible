@@ -4,7 +4,7 @@
 - name: install torch
   shell: cd {{ ansible_env.HOME }}/torch && ./install.sh -b creates={{ ansible_env.HOME }}/torch/install/bin/torch-activate
 
-- name: update cutorch and cunn
+- name: update torch
   shell: "{{ torch_source_cmd }} && cd torch && luarocks install torch"
 
 - name: clone torch nn repository
@@ -73,12 +73,13 @@
   shell: "{{ torch_source_cmd }} && cd torch/fbnn && luarocks make rocks/fbnn-scm-1.rockspec"
 
 - name: update cutorch and cunn
-  shell: "{{ torch_source_cmd }} && cd torch && luarocks install cutorch && luarocks install cunn"
-  environment:
-      CMAKE_CXX_STANDARD: 98
+  environment: "{{ cuda_env }}"
+  shell: "{{ torch_source_cmd }} && cd torch && CMAKE_CXX_STANDARD=98 luarocks install cutorch && CMAKE_CXX_STANDARD=98 luarocks install cunn"
 
 - name: clone fbcunn repository
+  environment: "{{ cuda_env }}"
   git: repo=https://github.com/facebook/fbcunn.git dest={{ ansible_env.HOME }}/torch/fbcunn update=no
 
 - name: build fbcunn
+  environment: "{{ cuda_env }}"
   shell: "{{ torch_source_cmd }} && cd torch/fbcunn && luarocks make rocks/fbcunn-scm-1.rockspec"
