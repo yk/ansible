@@ -1,0 +1,24 @@
+- name: get gcc 5.4
+  get_url: url=ftp://ftp.gnu.org/gnu/gcc/gcc-5.4.0/gcc-5.4.0.tar.gz dest={{ ansible_env.HOME}}/libsrc/gcc-5.4.0.tar.gz
+
+- name: unpack gcc 5.4
+  unarchive: src={{ ansible_env.HOME }}/libsrc/gcc-5.4.0.tar.gz dest={{ ansible_env.HOME }}/libsrc copy=no creates={{ ansible_env.HOME }}/libsrc/gcc-5.4.0/configure
+
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53731
+#- name: patch gcc 5.4
+  #lineinfile: "dest={{ ansible_env.HOME }}/libsrc/gcc-5.4.0/{{ item }} regexp='^HOST_LIB_PATH_gcc' line='HOST_LIB_PATH_gcc = $$r/$(HOST_SUBDIR)/gcc$(MULTISUBDIR)$(GCC_SHLIB_SUBDIR):$$r/$(HOST_SUBDIR)/prev-gcc$(MULTISUBDIR)$(GCC_SHLIB_SUBDIR):'"
+  #with_items:
+      #- Makefile.in
+      #- Makefile.tpl
+
+
+- name: build gcc 5.4
+  shell: cd libsrc/gcc-5.4.0 && mkdir -p build && cd build && ../configure --enable-languages="c,c++" --prefix=/opt/gcc5 && make -j16 creates={{ ansible_env.HOME }}/libsrc/gcc-5.4.0/build/gcc/cc1
+
+- name: install gcc 5.4
+  become: yes
+  shell: mkdir -p /opt/gcc5 && cd libsrc/gcc-5.4.0/build && make install creates=/opt/gcc5/bin/gcc
+  
+- name: link as into gcc 5.4 directory
+  become: yes
+  file: src=/usr/bin/as dest=/opt/gcc5/bin/as state=link
