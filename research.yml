@@ -9,12 +9,16 @@
       LDFLAGS: -L/usr/local/cuda/lib64 
       PATH: "/usr/local/cuda/bin:{{ ansible_env.PATH }}"
       LD_LIBRARY_PATH: "/usr/local/cuda/lib64:/usr/local/lib:{{ ansible_env.LD_LIBRARY_PATH | default('') }}"
+      CC: "/opt/gcc5/bin/gcc"
+      CXX: "/opt/gcc5/bin/g++"
+      #C_INCLUDE_PATH: "/usr/local/cuda/include:{{ ansible_env.C_INCLUDE_PATH | default('') }}"
+      #CPLUS_INCLUDE_PATH: "/usr/local/cuda/include:{{ ansible_env.CPLUS_INCLUDE_PATH | default('') }}"
 
   roles:
       - common
       - { role: paths, profile_file: ".zshenv" }
       - { role: python-user-packages, pip_bin: "/usr/bin/pip3", tags: run}
+      - tensorflow-from-source
+      #- opencv-from-source
       - torch-cuda
       - fb-torch-rocks-cuda
-      - tensorflow-from-source
-      - opencv-from-source

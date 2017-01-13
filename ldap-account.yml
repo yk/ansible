@@ -9,6 +9,9 @@
         private: no
 
   tasks:
+      - shell: getent passwd {{ username }}
+        become: yes
+
       - shell: getent passwd | grep "^{{ username }}:"
         become: yes
 

@@ -25,3 +25,7 @@
 - name: set omp num threads
   become: yes
   lineinfile: dest=/etc/skel/.bashrc line='export OMP_NUM_THREADS=3'
+
+#- name: set c compiler to gcc 5.4
+  #become: yes
+  #lineinfile: dest=/etc/skel/.bashrc line='export CC=/usr/local/bin/x86_64-unknown-linux-gnu-gcc-5.4.0'

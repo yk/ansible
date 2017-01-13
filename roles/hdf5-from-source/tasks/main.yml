@@ -1,5 +1,5 @@
 - name: download hdf5 source
-  get_url: url=http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-{{hdf5_version}}.tar.gz dest={{ansible_env.HOME}}/libsrc/hdf5.tar.gz
+  get_url: url=http://www.hdfgroup.org/ftp/HDF5/current18/src/hdf5-{{hdf5_version}}.tar.gz dest={{ansible_env.HOME}}/libsrc/hdf5.tar.gz
 
 - name: untar hdf5
   unarchive: src={{ansible_env.HOME}}/libsrc/hdf5.tar.gz copy=no dest={{ansible_env.HOME}}/libsrc creates={{ansible_env.HOME}}/libsrc/hdf5-{{hdf5_version}}/configure

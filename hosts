@@ -22,7 +22,7 @@ dco-head001
 [research]
 gpu
 grinder
-bpu
+#bpu
 
 [gpus]
 gpu
