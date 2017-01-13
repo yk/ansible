@@ -6,6 +6,7 @@
   shell: cd {{ ansible_env.HOME }}/torch && ./install.sh -b creates={{ ansible_env.HOME }}/torch/install/bin/torch-activate
 
 - name: update torch
+  environment: "{{ cuda_env }}"
   shell: "{{ torch_source_cmd }} && cd torch && luarocks install torch"
 
 - name: clone torch nn repository
