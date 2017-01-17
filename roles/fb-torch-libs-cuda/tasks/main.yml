@@ -68,7 +68,7 @@
   pip: name=ansible executable=/usr/bin/pip2
 
 - name: clone nccl
-  git: repo=https://github.com/NVIDIA/nccl.git dest={{ ansible_env.HOME }}/libsrc/nccl
+  git: repo=https://github.com/NVIDIA/nccl.git dest={{ ansible_env.HOME }}/libsrc/nccl update=no
 
 - name: build nccl
   shell: cd libsrc/nccl && make -j14 creates={{ ansible_env.HOME }}/libsrc/nccl/build/lib/libnccl.so
