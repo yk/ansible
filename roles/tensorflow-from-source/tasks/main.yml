@@ -5,13 +5,13 @@
   shell: cd libsrc && ./install_bazel.sh --user creates={{ansible_env.HOME}}/bin/bazel
 
 - name: clone tensorflow
-  git: repo=https://github.com/tensorflow/tensorflow version=r1.0 dest={{ ansible_env.HOME }}/libsrc/tensorflow update=yes accept_hostkey=yes
+  git: repo=https://github.com/tensorflow/tensorflow version=r0.12 dest={{ ansible_env.HOME }}/libsrc/tensorflow update=yes accept_hostkey=yes
 
 - name: build tensorflow
-  shell: cd libsrc/tensorflow && printf '/usr/bin/python3\n\n\n/usr/lib/python3.5/site-packages\n\ny\n/opt/gcc5/bin/gcc\n\n\n\n\n\n' | ./configure && bazel build -c opt --config=cuda //tensorflow/cc:tutorials_example_trainer && bazel build -c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package && mkdir -p tmp && bazel-bin/tensorflow/tools/pip_package/build_pip_package $PWD/tmp/tensorflow_pkg creates={{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-1.0.0a0-cp35-cp35m-linux_x86_64.whl
+  shell: cd libsrc/tensorflow && printf '/usr/bin/python3\n\n\n/usr/lib/python3.5/site-packages\n\ny\n/opt/gcc5/bin/gcc\n\n\n\n\n\n' | ./configure && bazel build -c opt --config=cuda //tensorflow/cc:tutorials_example_trainer && bazel build -c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package && mkdir -p tmp && bazel-bin/tensorflow/tools/pip_package/build_pip_package $PWD/tmp/tensorflow_pkg creates={{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-0.12.1-cp35-cp35m-linux_x86_64.whl
 
 - name: install tensorflow
-  pip: name='file://{{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-1.0.0a0-cp35-cp35m-linux_x86_64.whl' extra_args='--user --upgrade' executable=/usr/bin/pip3
+  pip: name='file://{{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-0.12.1-cp35-cp35m-linux_x86_64.whl' extra_args='--user --upgrade' executable=/usr/bin/pip3
 
 - name: install prettytensor
   pip: name='git+https://github.com/google/prettytensor' extra_args='--user --upgrade' executable=/usr/bin/pip3 editable=false
