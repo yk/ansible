@@ -9,6 +9,7 @@
       - xxhash
       - nose
       - rq
+      - lmdb
       - "git+https://github.com/theano/theano"
       - "git+https://github.com/lasagne/lasagne"
       #- "git+https://github.com/yk/fuel"

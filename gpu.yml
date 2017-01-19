@@ -26,8 +26,8 @@
       - { role: python-root-packages, python_cmd: "python2", pip_bin: "/usr/bin/pip2" }
       - { role: python-root-packages, python_cmd: "python3", pip_bin: "/usr/bin/pip3" }
       - nvidia-driver
+      - gcc-from-source
       - cuda-8
       - cuda-skel
-      - gcc-from-source
       - torch-cuda
       - fb-torch-libs-cuda
