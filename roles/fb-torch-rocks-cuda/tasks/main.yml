@@ -22,7 +22,6 @@
   lineinfile: "dest={{ ansible_env.HOME }}/torch/thpp/thpp/build.sh line='FB=\"$FB -DCMAKE_CXX_STANDARD=14 -DNO_TESTS=1\"' state=present insertafter='cd build'"
 
 - name: build thpp
-  environment: "{{ cuda_env }}"
   shell: "{{ torch_source_cmd }} && cd torch/thpp/thpp && ./build.sh creates={{ ansible_env.HOME }}/torch/thpp/thpp/build/libthpp.so"
   register: buildthpp_result
 
@@ -34,6 +33,7 @@
   git: repo=https://github.com/facebook/fblualib dest={{ ansible_env.HOME }}/torch/fblualib update=no 
 
 - name: build fblualib
+  environment: "{{ cuda_env }}"
   shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && mkdir -p build && cd build && cmake .. && make -j14 creates={{ ansible_env.HOME }}/torch/fblualib/fblualib/build/libfblualib.so"
   register: buildfblualib_result
 
