@@ -9,8 +9,4 @@
       - { role: python-root-packages, python_cmd: "python3", pip_bin: "/usr/bin/pip3" }
       - tmux-from-source
       - { role: python-user-packages, pip_bin: "/usr/bin/pip3" }
-      - { role: datasets, fuel_data_path: "{{ansible_env.HOME}}/data" }
-      - { role: theano, device: cpu}
       - root
-      - wat-remote
-      - web-file-server

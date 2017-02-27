@@ -5,9 +5,9 @@
   become: yes
   shell: "{{python_cmd}} libsrc/get-pip.py creates={{pip_bin}}"
 
-- name: upgrade pip
-  become: yes
-  pip: name=pip executable={{pip_bin}} extra_args="--upgrade"
+#- name: upgrade pip
+  #become: yes
+  #pip: name=pip executable={{pip_bin}} extra_args="--upgrade"
 
 #- name: install cython
   #become: yes

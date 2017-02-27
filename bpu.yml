@@ -8,7 +8,7 @@
       CFLAGS: -I/usr/local/cuda/include 
       LDFLAGS: -L/usr/local/cuda/lib64 
       PATH: "/usr/local/cuda/bin:{{ ansible_env.PATH }}"
-      LD_LIBRARY_PATH: "/usr/local/cuda/lib64:{{ ansible_env.LD_LIBRARY_PATH | default('') }}"
+      LD_LIBRARY_PATH: "/usr/local/cuda/lib64:/usr/local/lib:{{ ansible_env.LD_LIBRARY_PATH | default('') }}"
       CC: "/opt/gcc5/bin/gcc"
       CXX: "/opt/gcc5/bin/g++"
 
@@ -21,10 +21,11 @@
       - { role: paths, profile_file: ".zshenv" }
       - tmux-from-source
       - mathlibs
-      - { role: hdf5-from-source, hdf5_version: "1.8.17" }
+      - { role: hdf5-from-source, hdf5_version: "1.8.18" }
       - { role: python-root-packages, python_cmd: "python2", pip_bin: "/usr/bin/pip2" }
       - { role: python-root-packages, python_cmd: "python3", pip_bin: "/usr/bin/pip3" }
       - nvidia-driver
+      - gcc-from-source
       - cuda-8
       - cuda-skel
       - torch-cuda
