@@ -16,7 +16,7 @@
 
 - name: install nvidia-docker
   become: yes
-  dnf: name=https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.0-rc.3/nvidia-docker-1.0.0.rc.3-1.x86_64.rpm state=present
+  dnf: name=https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.0/nvidia-docker-1.0.0-1.x86_64.rpm state=present
 
 - name: mark lvm2 installed
   become: yes
