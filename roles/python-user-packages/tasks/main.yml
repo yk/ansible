@@ -20,3 +20,4 @@
       #- "git+https://github.com/yk/fast-jlt"
       - "git+https://github.com/yk/fountain"
       - "git+https://github.com/yk/rat"
+      - "git+https://github.com/yk/ypack"

@@ -1,0 +1,3 @@
+- name: install dnf packages
+  become: yes
+  apt: state=present name=mosh,cowsay,libssl-dev

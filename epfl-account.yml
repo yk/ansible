@@ -1,0 +1,16 @@
+- hosts: all
+  vars_prompt:
+      - name: "username"
+        prompt: "username"
+        private: no
+      - name: "password"
+        prompt: "password"
+        private: yes
+
+  tasks:
+      - user: name={{ username }} group='MLO-unit' groups='MLO-unit,mlologins' home=/home/{{ username }} createhome=no shell=/bin/bash
+        become: yes
+        register: createuser
+
+      - shell: echo {{ username }}:{{ password }} | chpasswd
+        become: yes

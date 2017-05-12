@@ -1,0 +1,26 @@
+- name: install pycuda3
+  become: yes
+  pip: name=pycuda executable=/usr/bin/pip3
+  environment: "{{cuda_env}}"
+
+- name: copy cudnn5
+  copy: src=../files/cudnn5.tgz dest={{ansible_env.HOME}}/libsrc/cudnn5.tgz mode=0755
+
+- name: make cudnn5 dir
+  file: path={{ ansible_env.HOME }}/libsrc/cudnn5 state=directory
+
+- name: extract cudnn5
+  unarchive: src={{ansible_env.HOME}}/libsrc/cudnn5.tgz dest={{ ansible_env.HOME }}/libsrc/cudnn5 creates={{ ansible_env.HOME }}/libsrc/cudnn5/cuda/include/cudnn.h copy=no
+
+- name: copy cudnn5 files
+  become: yes
+  shell: cp {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/include/* /usr/local/cuda-8.0/include/ && cp -a {{ ansible_env.HOME }}/libsrc/cudnn5/cuda/lib64/* /usr/local/cuda-8.0/lib64/ creates=/usr/local/cuda-8.0/include/cudnn.h
+
+- name: set compute mode
+  become: yes
+  shell: "nvidia-smi -c 3"
+
+#- name: dereference links
+  #become: yes
+  #shell: "cd /usr/local && rm -rf cuda && cp -rL cuda-8.0 cuda"
+
