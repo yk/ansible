@@ -1,7 +1,7 @@
-[daint]
+[gdaint]
 daint
 
-[cake]
+[gcake]
 cake
 
 [dco]
@@ -30,13 +30,13 @@ gpu
 grinder
 ya
 
-[bpu]
+[gbpu]
 bpu
 
-[bpus]
+[gbpus]
 bpus
 
-[optimus]
+[goptimus]
 optimus
 
 [epfl]
