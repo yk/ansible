@@ -1,7 +1,7 @@
 - hosts: research
 
   vars:
-    torch_source_cmd: ". $HOME/torch/install/bin/torch-activate"
+    #torch_source_cmd: ". $HOME/torch/install/bin/torch-activate"
     cuda_env:
       CUDA_ROOT: /usr/local/cuda
       CUDA_HOME: /usr/local/cuda
@@ -9,8 +9,8 @@
       LDFLAGS: -L/usr/local/cuda/lib64 
       PATH: "/usr/local/cuda/bin:{{ ansible_env.PATH }}"
       LD_LIBRARY_PATH: "/usr/local/cuda/lib64:/usr/local/lib:{{ ansible_env.LD_LIBRARY_PATH | default('') }}"
-      CC: "/opt/gcc5/bin/gcc"
-      CXX: "/opt/gcc5/bin/g++"
+      #CC: "/opt/gcc5/bin/gcc"
+      #CXX: "/opt/gcc5/bin/g++"
       #C_INCLUDE_PATH: "/usr/local/cuda/include:{{ ansible_env.C_INCLUDE_PATH | default('') }}"
       #CPLUS_INCLUDE_PATH: "/usr/local/cuda/include:{{ ansible_env.CPLUS_INCLUDE_PATH | default('') }}"
 
@@ -19,6 +19,6 @@
       - { role: paths, profile_file: ".zshenv" }
       - { role: python-user-packages, pip_bin: "/usr/bin/pip3", tags: run}
       - tensorflow-from-source
-      - opencv-from-source
+      #- opencv-from-source
       #- torch-cuda
       #- fb-torch-rocks-cuda

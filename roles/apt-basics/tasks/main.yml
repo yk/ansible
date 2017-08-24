@@ -1,3 +1,35 @@
-- name: install dnf packages
+- name: install python-apt
   become: yes
-  apt: state=present name=mosh,cowsay,libssl-dev
+  shell: apt-get install -y python python-apt creates=/usr/lib/python2.7/dist-packages/apt/__init__.py
+
+- name: install apt packages
+  become: yes
+  apt: state=present name=libssl-dev,gcc,g++,gfortran,lvm2,libboost-all-dev,libczmq-dev,graphviz,gnuplot,nano,libfreetype6,libfreetype6-dev,libffi6,libffi-dev,libpng12-dev,libtiff-dev,libjpeg-turbo8-dev,libzip-dev,bzip2,liblcms2-dev,libwebp-dev,tcl-dev,tk-dev,wget,curl,vim,python,python3,swig,zip,unzip,python-dev,python3-dev,git,default-jdk,maven,liblz-dev,screen,libprotobuf-dev,libleveldb-dev,libsnappy-dev,liblmdb-dev,libopencv-dev,python-opencv,libhdf5-dev,libgflags-dev,libgoogle-glog-dev,linux-headers-generic,linux-generic,dkms,acpid,emacs,zsh,cmake,htop,libpcre3-dev,ctags,autojump,libevent-dev,libreadline-dev,libncurses-dev,nodejs,npm,imagemagick,graphicsmagick,libsox-dev,make,automake,autoconf,autoconf-archive,libtool,libdouble-conversion-dev,libtool,liblzma-dev,numactl,flex,libbison-dev,libatomic1,libsasl2-dev,sasl2-bin,libedit-dev,libmatio-dev,cowsay,sl,mosh,smem,tree,scala,scons,net-tools,sysstat,postgresql,elinks,libgmp-dev,libmpfr-dev,libmpc-dev,linux-libc-dev,erlang,clang,llvm,tmux,apt-transport-https,gnupg-curl,python-pip,python3-pip,python-tk,python3-tk
+
+- name: add docker key
+  become: yes
+  apt_key: state=present keyserver=https://download.docker.com/linux/ubuntu/gpg id=9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+
+- name: add docker repo
+  become: yes
+  apt_repository: state=present repo="deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable" mode='644' update_cache=yes
+
+- name: install docker
+  become: yes
+  apt: state=present name=docker-ce
+
+- name: add mongo key
+  become: yes
+  apt_key: state=present keyserver=hkp://keyserver.ubuntu.com:80 id=0C49F3730359A14518585931BC711F9BA15703C6
+
+- name: add mongo repo
+  become: yes
+  apt_repository: state=present repo="deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" mode='644' update_cache=yes
+
+- name: install mongo
+  become: yes
+  apt: state=present name=mongodb-org-shell,mongodb-org-tools
+
+- name: mark lvm2 installed
+  become: yes
+  command: apt-mark manual lvm2

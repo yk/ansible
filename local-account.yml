@@ -22,5 +22,5 @@
         become: yes
         when: createuser.changed
 
-      - shell: echo {{ password }} | passwd --stdin {{ username }}
+      - shell: "echo {{username}}:{{ password }} | /usr/sbin/chpasswd"
         become: yes

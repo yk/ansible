@@ -1,6 +1,6 @@
-- name: install dnf packages
+- name: install apt packages
   become: yes
-  dnf: name=lvm2,lvm2-libs state=present
+  apt: name=lvm2 state=present
 
 - name: reboot
   become: yes

@@ -25,6 +25,6 @@
    #- 'https://github.com/scipy/scipy/archive/v0.17.1.tar.gz'
    - numpy
    - scipy
-   - ipython
+   - "{{ipython_pkg}}"
    - matplotlib
    - Pillow

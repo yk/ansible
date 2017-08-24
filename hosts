@@ -22,13 +22,15 @@ dco-head001
 [research]
 gpu
 grinder
-ya
+#ya
 bpu
+#ar
 
 [gpus]
 gpu
 grinder
-ya
+#ya
+#ar
 
 [gbpu]
 bpu

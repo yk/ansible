@@ -1,10 +1,10 @@
 - name: install cuda repositories
   become: yes
-  dnf: name=http://developer.download.nvidia.com/compute/cuda/repos/fedora23/x86_64/cuda-repo-fedora23-8.0.44-1.x86_64.rpm state=present
+  apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb state=present update_cache=yes
 
 - name: install cuda8
   become: yes
-  dnf: name=cuda state=present
+  apt: name=cuda state=present
 
 #- name: symlink cuda to cuda
   #become: yes
@@ -37,9 +37,9 @@
   become: yes
   shell: "nvidia-smi -c 3"
 
-- name: dereference links
-  become: yes
-  shell: "cd /usr/local && rm -rf cuda && cp -rL cuda-8.0 cuda"
+#- name: dereference links
+  #become: yes
+  #shell: "cd /usr/local && rm -rf cuda && cp -rL cuda-8.0 cuda"
 
 #- name: dont cause error for non gcc5
   #become: yes
