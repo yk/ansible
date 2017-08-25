@@ -1,0 +1,26 @@
+- name: install fold preq
+  pip:
+      virtualenv: "{{ansible_env.HOME}}/foldenv"
+      virtualenv_python: python3.5
+      name: pip,wheel,numpy,nltk,tqdm,sh
+
+- name: clone fold
+  git: repo=https://github.com/tensorflow/fold dest={{ ansible_env.HOME }}/libsrc/fold update=no accept_hostkey=yes
+
+- name: build fold tensorflow
+  shell: . foldenv/bin/activate && cd libsrc/fold/tensorflow && printf '\n\n\n\n\ny\n\n\ny\n\n\n\n\n\n\n' | ./configure && bazel build -c opt --copt=-msse3 --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx --copt=-mavx2 --copt=-mfma --copt=-mfpmath=both --copt=-march=native --copt=-O3 --config=cuda //tensorflow/tools/pip_package:build_pip_package && mkdir -p tmp && bazel-bin/tensorflow/tools/pip_package/build_pip_package $PWD/tmp/tensorflow_pkg creates={{ansible_env.HOME}}/libsrc/fold/tensorflow/tmp/tensorflow_pkg/tensorflow-1.1.0rc0-cp35-cp35m-linux_x86_64.whl
+
+- name: build fold
+  shell: . foldenv/bin/activate && cd libsrc/fold/tensorflow && printf '\n\n\n\n\ny\n\n\ny\n\n\n\n\n\n\n' | ./configure && cd .. && bazel build -c opt --copt=-msse3 --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx --copt=-mavx2 --copt=-mfma --copt=-mfpmath=both --copt=-march=native --copt=-O3 //tensorflow_fold/util:build_pip_package && mkdir -p tmp && bazel-bin/tensorflow_fold/util/build_pip_package $PWD/tmp/fold_pkg creates={{ansible_env.HOME}}/libsrc/fold/tmp/fold_pkg/tensorflow_fold-0.0.1-cp35-cp35m-linux_x86_64.whl
+
+- name: install fold tensorflow
+  pip: name='file://{{ansible_env.HOME}}/libsrc/fold/tensorflow/tmp/tensorflow_pkg/tensorflow-1.1.0rc0-cp35-cp35m-linux_x86_64.whl' extra_args='--upgrade' virtualenv='{{ansible_env.HOME}}/foldenv'
+
+- name: install fold
+  pip: name='file://{{ansible_env.HOME}}/libsrc/fold/tmp/fold_pkg/tensorflow_fold-0.0.1-cp35-cp35m-linux_x86_64.whl' extra_args='--upgrade' virtualenv='{{ansible_env.HOME}}/foldenv'
+
+#- name: install prettytensor
+  #pip: name='git+https://github.com/google/prettytensor' extra_args='--user --upgrade' executable=/usr/bin/pip3 editable=false
+
+#- name: install tensorpack
+  #pip: name='git+https://github.com/yk/tensorpack' extra_args='--user --upgrade' executable=/usr/bin/pip3 editable=false
