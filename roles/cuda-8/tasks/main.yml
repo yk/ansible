@@ -4,7 +4,7 @@
 
 - name: install cuda8
   become: yes
-  apt: name=cuda state=present
+  apt: name=cuda state=present update_cache=yes
 
 #- name: symlink cuda to cuda
   #become: yes
