@@ -27,9 +27,9 @@ bpu
 ar
 
 [gpus]
-#gpu
-#grinder
-#ya
+gpu
+grinder
+ya
 ar
 
 [gbpu]
