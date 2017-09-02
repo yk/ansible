@@ -27,10 +27,10 @@ bpu
 ar
 
 [gpus]
-gpu
-grinder
+#gpu
+#grinder
 ya
-ar
+#ar
 
 [gbpu]
 bpu
