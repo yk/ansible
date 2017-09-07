@@ -9,8 +9,6 @@
       LDFLAGS: -L/usr/local/cuda/lib64 
       PATH: "/usr/local/cuda/bin:{{ ansible_env.PATH }}"
       LD_LIBRARY_PATH: "/usr/local/cuda/lib64:{{ ansible_env.LD_LIBRARY_PATH | default('') }}"
-      CC: "/opt/gcc5/bin/gcc"
-      CXX: "/opt/gcc5/bin/g++"
 
   tasks:
       - include: tftasks.yml
