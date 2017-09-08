@@ -118,4 +118,4 @@
 
 - name: build fbcunn
   environment: "{{ cuda_env }}"
-  shell: "{{ torch_source_cmd }} && cd torch/fbcunn && luarocks make rocks/fbcunn-scm-1.rockspec"
+  shell: "{{ torch_source_cmd }} && cd torch/fbcunn && CMAKE_CXX_STANDARD=14 luarocks make rocks/fbcunn-scm-1.rockspec"
