@@ -23,7 +23,7 @@
 
 - name: fix thpp build more
   lineinfile:
-      dest: '{{ ansible_env.HOME }}/torch/thpp/detail/TensorGeneric.h'
+      dest: '{{ ansible_env.HOME }}/torch/thpp/thpp/detail/TensorGeneric.h'
       line: 'return THTensor_({{item}})(values, indices, t, dim, 1);'
       state: present
       regexp: '\s+return THTensor_\({{item}}\)'
@@ -34,7 +34,7 @@
 
 - name: fix thpp build even more
   lineinfile:
-      dest: '{{ ansible_env.HOME }}/torch/thpp/detail/TensorGeneric.h'
+      dest: '{{ ansible_env.HOME }}/torch/thpp/thpp/detail/TensorGeneric.h'
       line: 'return THTensor_({{item}})(r, t, dim, 1);'
       state: present
       regexp: '\s+return THTensor_\({{item}}\)'
