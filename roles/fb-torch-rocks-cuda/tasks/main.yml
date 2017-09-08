@@ -90,7 +90,7 @@
       -   mattorch 
 
 - name: make torch rock
-  shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && cd torch && luarocks make rockspec/fb_torch-0.1-1.rockspec"
+  shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && cd torch && luarocks make rockspec/fbtorch-0.1-1.rockspec"
 
 - name: build torch nn
   shell: "{{ torch_source_cmd }} && cd torch/nn && luarocks make rocks/nn-scm-1.rockspec"
