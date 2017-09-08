@@ -33,7 +33,11 @@
       - min
 
 - name: fix thpp build even more
-  lineinfile: "dest={{ ansible_env.HOME }}/torch/thpp/detail/TensorGeneric.h line='return THTensor_({{item}})(r, t, dim, 1);' state=present regexp='\s+return THTensor_\({{item}}\)'"
+  lineinfile:
+      dest: '{{ ansible_env.HOME }}/torch/thpp/detail/TensorGeneric.h'
+      line: 'return THTensor_({{item}})(r, t, dim, 1);'
+      state: present
+      regexp: '\s+return THTensor_\({{item}}\)'
   with_items:
       - sum
       - prod
