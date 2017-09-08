@@ -110,7 +110,7 @@
 
 - name: update cutorch and cunn
   environment: "{{ cuda_env }}"
-  shell: "{{ torch_source_cmd }} && cd torch && CMAKE_CXX_STANDARD=98 luarocks install cutorch && CMAKE_CXX_STANDARD=98 luarocks install cunn"
+  shell: "{{ torch_source_cmd }} && cd torch && CMAKE_CXX_STANDARD=98 luarocks install cutorch && CMAKE_CXX_STANDARD=98 luarocks install cunn && luarocks install multikey"
 
 - name: clone fbcunn repository
   environment: "{{ cuda_env }}"
