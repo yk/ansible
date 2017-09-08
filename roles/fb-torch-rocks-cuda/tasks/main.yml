@@ -79,7 +79,7 @@
 
 - name: change rocks build
   lineinfile:
-      dest: '{{ ansible_env.HOME }}/torch/fblualib/fblualib/mattorch/rockspec/fb{{item}}-0.1-1.rockspec'
+      dest: '{{ ansible_env.HOME }}/torch/fblualib/fblualib/mattorch/rockspec/fb{{ item }}-0.1-1.rockspec'
       line: '-DCMAKE_CXX_STANDARD=14 \'
       state: present
       insertafter: 'ROCKS_LIBDIR'
@@ -90,7 +90,7 @@
 - name: make more rocks
   shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && cd {{ item }} && luarocks make rockspec/fb{{ item }}-0.1-1.rockspec"
   with_items:
-      -   mattorch 
+      - mattorch 
       - torch
 
 - name: build torch nn
