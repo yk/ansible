@@ -21,6 +21,18 @@
 - name: change thpp build more
   lineinfile: "dest={{ ansible_env.HOME }}/torch/thpp/thpp/build.sh line='FB=\"$FB -DCMAKE_CXX_STANDARD=14 -DNO_TESTS=1\"' state=present insertafter='cd build'"
 
+- name: fix thpp build more
+  lineinfile: "dest={{ ansible_env.HOME }}/torch/thpp/detail/TensorGeneric.h line='return THTensor_({{item}})(values, indices, t, dim, 1);' state=present regexp='\s+return THTensor_\({{item}}\)'"
+  with_items:
+      - max
+      - min
+
+- name: fix thpp build even more
+  lineinfile: "dest={{ ansible_env.HOME }}/torch/thpp/detail/TensorGeneric.h line='return THTensor_({{item}})(r, t, dim, 1);' state=present regexp='\s+return THTensor_\({{item}}\)'"
+  with_items:
+      - sum
+      - prod
+
 - name: build thpp
   shell: "{{ torch_source_cmd }} && cd torch/thpp/thpp && ./build.sh creates={{ ansible_env.HOME }}/torch/thpp/thpp/build/libthpp.so"
   register: buildthpp_result
