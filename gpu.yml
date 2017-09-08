@@ -1,7 +1,7 @@
 - hosts: gpus
 
   vars:
-    #torch_source_cmd: ". $HOME/torch/install/bin/torch-activate"
+    torch_source_cmd: ". $HOME/torch/install/bin/torch-activate"
     cuda_env:
       CUDA_ROOT: /usr/local/cuda
       CUDA_HOME: /usr/local/cuda
@@ -28,5 +28,5 @@
       #- gcc-from-source
       - cuda-8
       - cuda-skel
-      #- torch-cuda
-      #- fb-torch-libs-cuda
+      - torch-cuda
+      - fb-torch-libs-cuda
