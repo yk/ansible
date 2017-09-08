@@ -116,6 +116,14 @@
   environment: "{{ cuda_env }}"
   git: repo=https://github.com/facebook/fbcunn.git dest={{ ansible_env.HOME }}/torch/fbcunn update=no
 
+- name: change fbcunn build
+  lineinfile:
+      dest: '{{ ansible_env.HOME }}/torch/fbcunn/rocks/fbcunn-scm-1.rockspec'
+      line: 'cmake -E make_directory build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$(LUA_BINDIR)/.." -DCMAKE_INSTALL_PREFIX="$(PREFIX)" -DCMAKE_CXX_STANDARD=14'
+      state: present
+      regexp: '^cmake -E'
+
+
 - name: build fbcunn
   environment: "{{ cuda_env }}"
   shell: "{{ torch_source_cmd }} && cd torch/fbcunn && CMAKE_CXX_STANDARD=14 luarocks make rocks/fbcunn-scm-1.rockspec"
