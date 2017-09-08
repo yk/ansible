@@ -83,9 +83,9 @@
       line: '-DCMAKE_CXX_STANDARD=14 \'
       state: present
       insertafter: 'ROCKS_LIBDIR'
-      with_items:
-          - mattorch
-          - torch
+    with_items:
+        - mattorch
+        - torch
 
 - name: make more rocks
   shell: "{{ torch_source_cmd }} && cd torch/fblualib/fblualib && cd {{ item }} && luarocks make rockspec/fb{{ item }}-0.1-1.rockspec"
