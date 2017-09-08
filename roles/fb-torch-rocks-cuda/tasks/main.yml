@@ -80,7 +80,7 @@
 - name: change mattorch build
   lineinfile:
       dest: '{{ ansible_env.HOME }}/torch/fblualib/fblualib/mattorch/rockspec/fbmattorch-0.1-1.rockspec'
-      line: '-DCMAKE_CXX_STANDARD=14 \\'
+      line: '-DCMAKE_CXX_STANDARD=14 \'
       state: present
       insertafter: 'ROCKS_LIBDIR'
 
