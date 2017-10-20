@@ -4,7 +4,7 @@
 
 - name: install cuda8
   become: yes
-  apt: name=cuda state=present update_cache=yes
+  apt: name=cuda-8-0 state=present update_cache=yes
 
 #- name: symlink cuda to cuda
   #become: yes
@@ -12,12 +12,12 @@
 
 - name: install pycuda
   become: yes
-  pip: name=pycuda executable=/usr/bin/pip2
+  pip: name=pycuda executable=/usr/bin/pip2 extra_args="--no-cache-dir --upgrade"
   environment: "{{cuda_env}}"
 
 - name: install pycuda3
   become: yes
-  pip: name=pycuda executable=/usr/bin/pip3
+  pip: name=pycuda executable=/usr/bin/pip3 extra_args="--no-cache-dir --upgrade"
   environment: "{{cuda_env}}"
 
 - name: copy cudnn6
