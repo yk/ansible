@@ -6,9 +6,9 @@
   become: yes
   apt: name=cuda-8-0 state=present update_cache=yes
 
-#- name: symlink cuda to cuda
-  #become: yes
-  #file: src=/usr/local/cuda-8.0 dest=/usr/local/cuda state=link
+- name: symlink cuda to cuda
+  become: yes
+  file: src=/usr/local/cuda-8.0 dest=/usr/local/cuda state=link
 
 - name: install pycuda
   become: yes

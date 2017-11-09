@@ -1,0 +1,50 @@
+- name: install cuda repositories
+  become: yes
+  apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.0.176-1_amd64.deb state=present update_cache=yes
+
+- name: install cuda9
+  become: yes
+  apt: name=cuda-9-0 state=present update_cache=yes
+
+#- name: symlink cuda to cuda
+  #become: yes
+  #file: src=/usr/local/cuda-9.0 dest=/usr/local/cuda state=link
+
+- name: install pycuda
+  become: yes
+  pip: name=pycuda executable=/usr/bin/pip2 extra_args="--no-cache-dir --upgrade"
+  environment: "{{cuda_env}}"
+
+- name: install pycuda3
+  become: yes
+  pip: name=pycuda executable=/usr/bin/pip3 extra_args="--no-cache-dir --upgrade"
+  environment: "{{cuda_env}}"
+
+- name: copy cudnn7
+  copy: src=../files/cudnn7.tgz dest={{ansible_env.HOME}}/libsrc/cudnn7.tgz mode=0755
+
+- name: make cudnn7 dir
+  file: path={{ ansible_env.HOME }}/libsrc/cudnn7 state=directory
+
+- name: extract cudnn7
+  unarchive: src={{ansible_env.HOME}}/libsrc/cudnn7.tgz dest={{ ansible_env.HOME }}/libsrc/cudnn7 creates={{ ansible_env.HOME }}/libsrc/cudnn7/cuda/include/cudnn.h copy=no
+
+- name: copy cudnn7 files
+  become: yes
+  shell: cp {{ ansible_env.HOME }}/libsrc/cudnn7/cuda/include/* /usr/local/cuda-9.0/include/ && cp -a {{ ansible_env.HOME }}/libsrc/cudnn7/cuda/lib64/* /usr/local/cuda-9.0/lib64/ creates=/usr/local/cuda-9.0/include/cudnn.h
+
+- name: set compute mode
+  become: yes
+  shell: "nvidia-smi -c 3"
+
+#- name: dereference links
+  #become: yes
+  #shell: "cd /usr/local && rm -rf cuda && cp -rL cuda-9.0 cuda"
+
+#- name: dont cause error for non gcc5
+  #become: yes
+  #lineinfile: dest=/usr/local/cuda/include/host_config.h regexp='unsupported GNU' state=absent
+
+#- name: replace nvcc by wrapper
+  #become: yes
+  #shell: cd /usr/local/cuda/bin && mv -n nvcc nvcc-real && echo '/usr/local/cuda/bin/nvcc-real -Xcompiler -D__CORRECT_ISO_CPP11_MATH_H_PROTO "$@"' > nvcc && chmod +x nvcc

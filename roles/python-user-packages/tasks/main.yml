@@ -8,10 +8,13 @@
       - scikit-image
       - xxhash
       - nose
+      - tqdm
+      - sh
       - rq
       - lmdb
       - "git+https://github.com/theano/theano"
       - "git+https://github.com/lasagne/lasagne"
+      - "git+https://github.com/tensorflow/cleverhans"
       #- "git+https://github.com/yk/fuel"
       - "git+https://github.com/WoLpH/python-progressbar"
       - "git+https://github.com/mila-udem/fuel"

@@ -27,6 +27,7 @@
       - nvidia-driver
       #- gcc-from-source
       - cuda-8
+      #- cuda-9
       - cuda-skel
       #- torch-cuda
       #- fb-torch-libs-cuda

@@ -6,14 +6,28 @@
 - include: ../../common/tasks/reboot.yml
   when: blnouveau.changed
 
-- name: download nvidia driver installer
-  get_url: url=http://us.download.nvidia.com/XFree86/Linux-x86_64/384.66/NVIDIA-Linux-x86_64-384.66.run dest={{ ansible_env.HOME }}/libsrc/nvidia.run mode=0544
+- name: install cuda repositories
+  become: yes
+  apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.0.176-1_amd64.deb state=present update_cache=yes
+
+#- name: stop lightdm
+  #service:
+      #name: lightdm
+      #state: stopped
+
+#- name: download nvidia driver installer
+  #get_url: url=http://us.download.nvidia.com/XFree86/Linux-x86_64/384.98/NVIDIA-Linux-x86_64-384.98.run dest={{ ansible_env.HOME }}/libsrc/nvidia.run mode=0544
+
+#- name: install nvidia driver
+  #become: yes
+  #command: "{{ ansible_env.HOME }}/libsrc/nvidia.run -s"
+  ##args:
+    ##creates: /usr/bin/nvidia-settings
+  #register: nvidiadriver
 
 - name: install nvidia driver
   become: yes
-  command: "{{ ansible_env.HOME }}/libsrc/nvidia.run -s"
-  args:
-    creates: /usr/bin/nvidia-settings
+  apt: name=nvidia-384 state=present
   register: nvidiadriver
 
 - include: ../../common/tasks/reboot.yml
