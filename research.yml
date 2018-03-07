@@ -18,8 +18,8 @@
       - common
       - { role: paths, profile_file: ".zshenv" }
       - { role: python-user-packages, pip_bin: "/usr/bin/pip3", tags: run}
-      - tensorflow-from-source
-      - tensorflow-fold
+      #- tensorflow-from-source
+      #- tensorflow-fold
       #- opencv-from-source
       #- torch-cuda
       #- fb-torch-rocks-cuda

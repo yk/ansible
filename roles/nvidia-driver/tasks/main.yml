@@ -6,9 +6,10 @@
 - include: ../../common/tasks/reboot.yml
   when: blnouveau.changed
 
-- name: install cuda repositories
-  become: yes
-  apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.0.176-1_amd64.deb state=present update_cache=yes
+# must re-enable this maybe
+#- name: install cuda repositories
+  #become: yes
+  #apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.0.176-1_amd64.deb state=present update_cache=yes
 
 #- name: stop lightdm
   #service:
@@ -27,13 +28,13 @@
 
 - name: install nvidia driver
   become: yes
-  apt: name=nvidia-384 state=present
+  apt: name=nvidia-390 state=present
   register: nvidiadriver
 
 - include: ../../common/tasks/reboot.yml
   when: nvidiadriver.changed
 
-- name: install nvidia-docker
-  become: yes
-  apt: deb=https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nvidia-docker_1.0.1-1_amd64.deb state=present
+#- name: install nvidia-docker
+  #become: yes
+  #apt: deb=https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nvidia-docker_1.0.1-1_amd64.deb state=present
 

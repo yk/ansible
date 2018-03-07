@@ -1,6 +1,6 @@
-- name: install cuda repositories
-  become: yes
-  apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb state=present update_cache=yes
+#- name: install cuda repositories
+  #become: yes
+  #apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb state=present update_cache=yes
 
 - name: install cuda8
   become: yes

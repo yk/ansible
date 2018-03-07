@@ -12,6 +12,9 @@
       - sh
       - rq
       - lmdb
+      - typing
+      - pyyaml
+      - cffi
       - "git+https://github.com/theano/theano"
       - "git+https://github.com/lasagne/lasagne"
       - "git+https://github.com/tensorflow/cleverhans"
@@ -24,3 +27,5 @@
       - "git+https://github.com/yk/fountain"
       - "git+https://github.com/yk/rat"
       - "git+https://github.com/yk/ypack"
+      - "git+https://github.com/pytorch/pytorch"
+      - tensorboard-pytorch

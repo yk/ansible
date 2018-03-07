@@ -1,14 +1,14 @@
-- name: install cuda repositories
-  become: yes
-  apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.0.176-1_amd64.deb state=present update_cache=yes
+#- name: install cuda repositories
+  #become: yes
+  #apt: deb=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.0.176-1_amd64.deb state=present update_cache=yes
 
 - name: install cuda9
   become: yes
   apt: name=cuda-9-0 state=present update_cache=yes
 
-#- name: symlink cuda to cuda
-  #become: yes
-  #file: src=/usr/local/cuda-9.0 dest=/usr/local/cuda state=link
+- name: symlink cuda to cuda
+  become: yes
+  file: src=/usr/local/cuda-9.0 dest=/usr/local/cuda state=link
 
 - name: install pycuda
   become: yes
