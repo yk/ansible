@@ -28,4 +28,5 @@
       - "git+https://github.com/yk/rat"
       - "git+https://github.com/yk/ypack"
       - "git+https://github.com/pytorch/pytorch"
+      - "git+https://github.com/pytorch/vision"
       - tensorboard-pytorch
