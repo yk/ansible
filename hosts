@@ -29,9 +29,9 @@ mark
 
 [gpus]
 #gpu
-grinder
-ya
-ar
+#grinder
+#ya
+#ar
 mark
 
 [gbpu]

@@ -6,5 +6,8 @@
     connection: local
     shell: "cd {{lookup('env', 'HOME')}}/git/dotfiles && tar czf dotfiles.tar.gz .zshrc .oh-my-zsh .vimrc .vim .tmux.conf"
 
+-   name: delete vim folder
+    file: "path={{lookup('env', 'HOME')}}/.vim state=absent"
+
 -   name: copy and unpack tarball
     unarchive: "src={{lookup('env', 'HOME')}}/git/dotfiles/dotfiles.tar.gz dest={{ ansible_env.HOME }} extra_opts='--overwrite'"
