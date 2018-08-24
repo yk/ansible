@@ -1,24 +1,25 @@
 - name: get bazel installer
-  get_url: url=https://github.com/bazelbuild/bazel/releases/download/0.7.0/bazel-0.7.0-installer-linux-x86_64.sh dest={{ ansible_env.HOME}}/libsrc/install_bazel.sh mode=0744
+  get_url: url=https://github.com/bazelbuild/bazel/releases/download/0.16.1/bazel-0.16.1-installer-linux-x86_64.sh dest={{ ansible_env.HOME}}/libsrc/install_bazel.sh mode=0744
 
 - name: install bazel
   shell: cd libsrc && ./install_bazel.sh --user creates={{ansible_env.HOME}}/bin/bazel
 
 - name: clone tensorflow
-  git: repo=https://github.com/tensorflow/tensorflow version=v1.4.0 dest={{ ansible_env.HOME }}/libsrc/tensorflow update=no accept_hostkey=yes
+  git: repo=https://github.com/tensorflow/tensorflow version=v1.10.0 dest={{ ansible_env.HOME }}/libsrc/tensorflow update=no accept_hostkey=yes
 
-- name: edit sqlite url
-  lineinfile:
-      path: '{{ansible_env.HOME}}/libsrc/tensorflow/tensorflow/workspace.bzl'
-      line: 'urls = ["https://www.sqlite.org/2017/sqlite-amalgamation-3200000.zip"],'
-      regexp: 'www.sqlite.org'
+#- name: edit sqlite url
+  #lineinfile:
+      #path: '{{ansible_env.HOME}}/libsrc/tensorflow/tensorflow/workspace.bzl'
+      #line: 'urls = ["https://www.sqlite.org/2017/sqlite-amalgamation-3200000.zip"],'
+      #regexp: 'www.sqlite.org'
 
 - name: build tensorflow
-  shell: cd libsrc/tensorflow && printf '/usr/bin/python3\n/usr/local/lib/python3.5/dist-packages\n\nn\nn\nn\ny\n\n\n\ny\n8.0\n\n6\n\n\n\n\n\n\n' | ./configure && bazel build -c opt --copt=-msse3 --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx --copt=-mavx2 --copt=-mfma --copt=-mfpmath=both --copt=-march=native --copt=-O3 --config=cuda //tensorflow/tools/pip_package:build_pip_package && mkdir -p tmp && bazel-bin/tensorflow/tools/pip_package/build_pip_package $PWD/tmp/tensorflow_pkg creates={{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-1.4.0-cp35-cp35m-linux_x86_64.whl
+  shell: cd libsrc/tensorflow && printf '/usr/bin/python3\n/usr/local/lib/python3.5/dist-packages\n\nn\nn\nn\nn\ny\n\n\n\ny\n9.0\n\n7\n\n\n1.3\n\n\n\n\n\n\n' | ./configure && bazel build -c opt --copt=-msse3 --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx --copt=-mavx2 --copt=-mfma --copt=-mfpmath=both --copt=-march=native --copt=-O3 --config=cuda //tensorflow/tools/pip_package:build_pip_package && mkdir -p tmp && bazel-bin/tensorflow/tools/pip_package/build_pip_package $PWD/tmp/tensorflow_pkg creates={{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-1.10.0-cp35-cp35m-linux_x86_64.whl
+
   #shell: cd libsrc/tensorflow && printf '/usr/bin/python3\n/usr/lib/python3.5/site-packages\n\n\n\n\n\ny\n\n\ny\n\n\n\n/opt/gcc5/bin/gcc\n\n\n\n\n' | ./configure && bazel build -c opt --copt=-msse3 --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx --copt=-mavx2 --copt=-mfma --copt=-mfpmath=both --copt=-march=native --copt=-O3 --config=cuda //tensorflow/tools/pip_package:build_pip_package && mkdir -p tmp && bazel-bin/tensorflow/tools/pip_package/build_pip_package $PWD/tmp/tensorflow_pkg creates={{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-1.4.0-cp35-cp35m-linux_x86_64.whl
 
 - name: install tensorflow
-  pip: name='file://{{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-1.4.0-cp35-cp35m-linux_x86_64.whl' extra_args='--user --upgrade' executable=/usr/bin/pip3
+  pip: name='file://{{ansible_env.HOME}}/libsrc/tensorflow/tmp/tensorflow_pkg/tensorflow-1.10.0-cp35-cp35m-linux_x86_64.whl' extra_args='--user --upgrade' executable=/usr/local/bin/pip3
 
 #- name: install prettytensor
   #pip: name='git+https://github.com/google/prettytensor' extra_args='--user --upgrade' executable=/usr/bin/pip3 editable=false

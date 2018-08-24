@@ -20,18 +20,18 @@ dco-node048
 dco-head001
 
 [research]
-#gpu
+gpu
 grinder
 ya
-bpu
+#bpu
 ar
 mark
 
 [gpus]
-#gpu
-#grinder
-#ya
-#ar
+gpu
+grinder
+ya
+ar
 mark
 
 [gbpu]

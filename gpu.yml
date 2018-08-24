@@ -20,10 +20,10 @@
       - scratch
       - { role: paths, profile_file: ".zshenv" }
       #- tmux-from-source
-      - mathlibs
+      #- mathlibs
       #- { role: hdf5-from-source, hdf5_version: "1.8.18" }
-      #- { role: python-root-packages, python_cmd: "python2", pip_bin: "/usr/bin/pip2", ipython_pkg: "ipython==5" }
-      #- { role: python-root-packages, python_cmd: "python3", pip_bin: "/usr/bin/pip3", ipython_pkg: "ipython" }
+      - { role: python-root-packages, python_cmd: "python2", pip_bin: "/usr/bin/pip2", ipython_pkg: "ipython==5" }
+      - { role: python-root-packages, python_cmd: "python3", pip_bin: "/usr/bin/pip3", ipython_pkg: "ipython" }
       - nvidia-driver
       #- gcc-from-source
       #- cuda-8

@@ -28,7 +28,7 @@
 
 - name: install nvidia driver
   become: yes
-  apt: name=nvidia-390 state=present
+  apt: name=nvidia-396 state=present
   register: nvidiadriver
 
 - include: ../../common/tasks/reboot.yml
